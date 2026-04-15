@@ -1,0 +1,27 @@
+﻿@model WebshopShop.ViewModels.Admin.ManufacturerViewModel
+
+@{
+    ViewData["Title"] = "Add Developer";
+}
+
+<div class="mb-3">
+    <a asp-controller="Manufacturer" asp-action="Index" class="text-muted text-decoration-none">← Back to Developers</a>
+</div>
+
+<h2 class="mb-1">Add Developer / Agency</h2>
+<p class="text-muted mb-4">Register a developer or agency whose webshops are sold on the platform.</p>
+
+<form asp-controller="Manufacturer" asp-action="Create" method="post" style="max-width: 400px;">
+    @Html.AntiForgeryToken()
+
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label fw-semibold">Developer / Agency Name</label>
+        <input asp-for="Name" class="form-control" placeholder="e.g. Acme Web Studios" />
+        <span asp-validation-for="Name" class="text-danger small"></span>
+    </div>
+
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary">Add Developer</button>
+        <a asp-controller="Manufacturer" asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+    </div>
+</form>

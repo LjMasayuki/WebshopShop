@@ -1,0 +1,130 @@
+﻿@model WebshopShop.ViewModels.HomeIndexViewModel
+
+@{
+    ViewData["Title"] = "Browse Webshops";
+    Layout = "_StorefrontLayout";
+}
+
+<div class="sf-page">
+    <div class="sf-hero">
+        <p class="sf-hero-tag">Ready-made webshops</p>
+        <h1 class="sf-hero-title">
+            Buy a webshop.<br>
+            <span class="sf-hero-title-muted">Skip the build.</span>
+        </h1>
+        <p class="sf-hero-sub">Professional webshops built by top developers — ready to launch.</p>
+    </div>
+
+    <div class="sf-filters">
+        <a class="sf-filter-pill @(Model.ActiveCategoryId == null ? "active" : "")"
+           asp-controller="Home" asp-action="Index">All</a>
+        @foreach (var category in Model.Categories)
+        {
+            <a class="sf-filter-pill @(Model.ActiveCategoryId == category.Id ? "active" : "")"
+                   asp-controller="Home" asp-action="Index" asp-route-categoryId="@category.Id">
+                @category.Name
+            </a>
+        }
+    </div>
+</div>
+
+<div class="sf-grid">
+    @if (!Model.Items.Any())
+    {
+        <div class="sf-empty">No webshops listed yet. Check back soon.</div>
+    }
+    @foreach (var item in Model.Items)
+    {
+        var badgeClass = "sf-badge-ecom";
+        var screenAccent = "#6666cc";
+        var cardBg = "#111";
+
+        switch (item.Category.Name.ToLower())
+        {
+            case "saas":
+                badgeClass = "sf-badge-saas"; screenAccent = "#4a9e4a"; cardBg = "#0d1117"; break;
+            case "portfolio":
+                badgeClass = "sf-badge-port"; screenAccent = "#cc7733"; cardBg = "#110d0d"; break;
+            case "blog":
+                badgeClass = "sf-badge-blog"; screenAccent = "#cc4488"; cardBg = "#0d110d"; break;
+            case "crm":
+                badgeClass = "sf-badge-crm"; screenAccent = "#33aaaa"; cardBg = "#11110d"; break;
+            case "finance":
+                badgeClass = "sf-badge-fin"; screenAccent = "#ccaa33"; cardBg = "#0d0d11"; break;
+        }
+
+        var avgRating = item.Reviews.Count > 0
+            ? Math.Round(item.Reviews.Average(r => (double)r.Score), 1)
+            : 0;
+
+        <a class="sf-card" asp-controller="Item" asp-action="Details" asp-route-id="@item.Id">
+            <div class="sf-card-img" style="background: @cardBg;">
+                <span class="sf-card-badge @badgeClass">@item.Category.Name</span>
+                <div class="sf-card-screen">
+                    <div class="sf-screen-bar">
+                        <div class="sf-screen-dot"></div>
+                        <div class="sf-screen-dot"></div>
+                        <div class="sf-screen-dot"></div>
+                    </div>
+                    <div class="sf-screen-body">
+                        <div class="sf-screen-line" style="width:60%"></div>
+                        <div class="sf-screen-line" style="width:100%"></div>
+                        <div class="sf-screen-line" style="width:75%"></div>
+                        <div class="sf-screen-line sf-screen-line-accent" style="background:@screenAccent"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="sf-card-info">
+                <p class="sf-card-title">@item.Title</p>
+                <p class="sf-card-dev">by @item.Manufacturer.Name</p>
+                <div class="sf-card-bottom">
+                    <span class="sf-card-price">€@item.Price.ToString("0.00")</span>
+                    @if (item.Reviews.Count > 0)
+                    {
+                        <span class="sf-card-rating">@avgRating ★</span>
+                    }
+                </div>
+            </div>
+        </a>
+    }
+</div>
+
+@if (Model.ReviewCount > 0)
+{
+    <div class="sf-page">
+        <section class="sf-reviews">
+            <div class="sf-reviews-header">
+                <span class="sf-reviews-score">@Model.AverageScore</span>
+                <span class="sf-reviews-stars">★★★★★</span>
+                <span class="sf-reviews-count">(@Model.ReviewCount reviews)</span>
+            </div>
+            <span class="sf-reviews-verified">Verified purchases</span>
+
+            <div class="sf-reviews-grid">
+                @foreach (var review in Model.Reviews)
+                {
+                    var initials = review.Item != null && review.Item.Title.Length >= 2
+                        ? review.Item.Title[..2].ToUpper()
+                        : "??";
+
+                    var stars = new string('★', (int)Math.Round((double)review.Score))
+                              + new string('☆', 5 - (int)Math.Round((double)review.Score));
+
+                    <div class="sf-review-card">
+                        <div class="sf-review-top">
+                            <span class="sf-review-stars">@stars</span>
+                        </div>
+                        <p class="sf-review-text">@review.Score / 5</p>
+                        <div class="sf-review-author">
+                            <div class="sf-review-avatar">@initials</div>
+                            <div>
+                                <p class="sf-review-name">Anonymous</p>
+                                <p class="sf-review-product">@review.Item?.Title</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </section>
+    </div>
+}

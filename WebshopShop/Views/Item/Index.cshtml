@@ -1,0 +1,53 @@
+﻿@model IEnumerable<WebshopShop.Models.Item>
+
+@{
+    ViewData["Title"] = "Admin — Webshops";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h2 class="mb-0">Webshops</h2>
+        <small class="text-muted">All webshop products listed on the platform</small>
+    </div>
+    <a asp-controller="Item" asp-action="Create" class="btn btn-primary">+ Add Webshop</a>
+</div>
+
+<table class="table table-striped table-hover align-middle">
+    <thead class="table-dark">
+        <tr>
+            <th>Title</th>
+            <th>Price</th>
+            <th>Category</th>
+            <th>Developer</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <strong>@item.Title</strong><br />
+                    <small class="text-muted">@item.Description.Substring(0, Math.Min(60, item.Description.Length))…</small>
+                </td>
+                <td>@item.Price.ToString("C")</td>
+                <td><span class="badge bg-secondary">@item.Category.Name</span></td>
+                <td>@item.Manufacturer.Name</td>
+                <td class="text-end">
+                    <a asp-controller="Item" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary">Edit</a>
+                    <form asp-controller="Item" asp-action="Delete" asp-route-id="@item.Id" method="post" class="d-inline"
+                          onsubmit="return confirm('Permanently delete \'@item.Title\'?')">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+        @if (!Model.Any())
+        {
+            <tr>
+                <td colspan="5" class="text-center text-muted py-4">No webshops listed yet. Add your first one.</td>
+            </tr>
+        }
+    </tbody>
+</table>

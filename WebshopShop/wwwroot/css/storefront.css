@@ -1,0 +1,510 @@
+﻿:root {
+    --sf-bg: #0f0f0f;
+    --sf-bg-card: #0f0f0f;
+    --sf-bg-card-hover: #141414;
+    --sf-bg-elevated: #141414;
+    --sf-divider: #1a1a1a;
+    --sf-border: #2a2a2a;
+    --sf-text-primary: #f0f0f0;
+    --sf-text-secondary: #888;
+    --sf-text-muted: #444;
+    --sf-text-white: #fff;
+    --sf-accent-ecom-bg: #1a1a2e;
+    --sf-accent-ecom-text: #6666cc;
+    --sf-accent-saas-bg: #0d1f0d;
+    --sf-accent-saas-text: #4a9e4a;
+    --sf-accent-port-bg: #1f1510;
+    --sf-accent-port-text: #cc7733;
+    --sf-accent-blog-bg: #1a1218;
+    --sf-accent-blog-text: #cc4488;
+    --sf-accent-crm-bg: #101a1a;
+    --sf-accent-crm-text: #33aaaa;
+    --sf-accent-fin-bg: #1a1610;
+    --sf-accent-fin-text: #ccaa33;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body.storefront {
+    background: var(--sf-bg);
+    color: var(--sf-text-primary);
+    font-family: var(--font-sans, system-ui, sans-serif);
+    margin: 0;
+}
+
+/* ─── Page wrapper ─────────────────────────────────────── */
+
+.sf-page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 32px;
+}
+
+@media (max-width: 768px) {
+    .sf-page {
+        padding: 0 16px;
+    }
+}
+
+/* ─── Nav ──────────────────────────────────────────────── */
+
+.sf-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 32px;
+    border-bottom: 0.5px solid var(--sf-divider);
+    position: sticky;
+    top: 0;
+    background: var(--sf-bg);
+    z-index: 100;
+}
+
+.sf-nav-brand {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--sf-text-white);
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.sf-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+    .sf-nav-links a {
+        font-size: 12px;
+        color: var(--sf-text-secondary);
+        text-decoration: none;
+        transition: color 0.15s;
+    }
+
+        .sf-nav-links a:hover {
+            color: var(--sf-text-white);
+        }
+
+    .sf-nav-links .sf-nav-cta {
+        color: var(--sf-text-white);
+    }
+
+.sf-nav-cart {
+    font-size: 12px;
+    color: var(--sf-text-secondary);
+    border: 0.5px solid var(--sf-border);
+    padding: 5px 14px;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: color 0.15s, border-color 0.15s;
+}
+
+    .sf-nav-cart:hover {
+        color: var(--sf-text-white);
+        border-color: var(--sf-text-secondary);
+    }
+
+/* ─── Hero ─────────────────────────────────────────────── */
+
+.sf-hero {
+    padding: 56px 0 40px;
+    border-bottom: 0.5px solid var(--sf-divider);
+}
+
+.sf-hero-tag {
+    font-size: 11px;
+    color: var(--sf-text-muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+.sf-hero-title {
+    font-size: 40px;
+    font-weight: 500;
+    color: var(--sf-text-white);
+    line-height: 1.15;
+    margin-bottom: 10px;
+}
+
+.sf-hero-title-muted {
+    color: var(--sf-text-secondary);
+}
+
+.sf-hero-sub {
+    font-size: 15px;
+    color: var(--sf-text-secondary);
+    max-width: 480px;
+}
+
+/* ─── Filter pills ─────────────────────────────────────── */
+
+.sf-filters {
+    display: flex;
+    gap: 8px;
+    padding: 16px 0;
+    border-bottom: 0.5px solid var(--sf-divider);
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+    .sf-filters::-webkit-scrollbar {
+        display: none;
+    }
+
+.sf-filter-pill {
+    font-size: 11px;
+    padding: 5px 14px;
+    border-radius: 20px;
+    border: 0.5px solid var(--sf-border);
+    color: var(--sf-text-secondary);
+    white-space: nowrap;
+    cursor: pointer;
+    text-decoration: none;
+    background: transparent;
+    transition: color 0.15s, border-color 0.15s;
+}
+
+    .sf-filter-pill:hover,
+    .sf-filter-pill.active {
+        border-color: var(--sf-text-white);
+        color: var(--sf-text-white);
+    }
+
+/* ─── Product grid ─────────────────────────────────────── */
+
+.sf-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    background: transparent;
+    align-items: start;
+    padding: 2rem 0;
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+@media (max-width: 900px) {
+    .sf-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 560px) {
+    .sf-grid {
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+
+/* ─── Card ─────────────────────────────────────────────── */
+
+.sf-card {
+    background: var(--sf-bg-card);
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+    transition: background 0.15s;
+    border: 0.5px solid var(--sf-border);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+    .sf-card:hover {
+        background: var(--sf-bg-card-hover);
+    }
+
+.sf-card-img {
+    aspect-ratio: 3 / 2;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: var(--sf-bg-elevated);
+}
+
+.sf-card-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-weight: 500;
+}
+
+.sf-badge-ecom {
+    background: var(--sf-accent-ecom-bg);
+    color: var(--sf-accent-ecom-text);
+}
+
+.sf-badge-saas {
+    background: var(--sf-accent-saas-bg);
+    color: var(--sf-accent-saas-text);
+}
+
+.sf-badge-port {
+    background: var(--sf-accent-port-bg);
+    color: var(--sf-accent-port-text);
+}
+
+.sf-badge-blog {
+    background: var(--sf-accent-blog-bg);
+    color: var(--sf-accent-blog-text);
+}
+
+.sf-badge-crm {
+    background: var(--sf-accent-crm-bg);
+    color: var(--sf-accent-crm-text);
+}
+
+.sf-badge-fin {
+    background: var(--sf-accent-fin-bg);
+    color: var(--sf-accent-fin-text);
+}
+
+/* ─── Card screen mockup ───────────────────────────────── */
+
+.sf-card-screen {
+    width: 100px;
+    height: 70px;
+    border-radius: 4px;
+    border: 0.5px solid var(--sf-border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.sf-screen-bar {
+    height: 10px;
+    background: var(--sf-divider);
+    display: flex;
+    align-items: center;
+    padding: 0 5px;
+    gap: 3px;
+}
+
+.sf-screen-dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--sf-border);
+}
+
+.sf-screen-body {
+    flex: 1;
+    background: #111;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.sf-screen-line {
+    height: 3px;
+    border-radius: 1px;
+    background: var(--sf-divider);
+}
+
+.sf-screen-line-accent {
+    height: 3px;
+    border-radius: 1px;
+    width: 50%;
+    margin-top: 2px;
+}
+
+/* ─── Card info ────────────────────────────────────────── */
+
+.sf-card-info {
+    padding: 10px 12px 12px;
+}
+
+.sf-card-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--sf-text-primary);
+    margin-bottom: 2px;
+}
+
+.sf-card-dev {
+    font-size: 10px;
+    color: var(--sf-text-muted);
+    margin-bottom: 8px;
+}
+
+.sf-card-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sf-card-price {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--sf-text-white);
+}
+
+.sf-card-rating {
+    font-size: 11px;
+    color: var(--sf-text-secondary);
+}
+
+/* ─── Reviews ──────────────────────────────────────────── */
+
+.sf-reviews {
+    padding: 48px 32px;
+    border-top: 0.5px solid var(--sf-divider);
+}
+
+.sf-reviews-header {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 6px;
+}
+
+.sf-reviews-score {
+    font-size: 32px;
+    font-weight: 500;
+    color: var(--sf-text-white);
+}
+
+.sf-reviews-stars {
+    font-size: 14px;
+    color: var(--sf-text-secondary);
+}
+
+.sf-reviews-count {
+    font-size: 12px;
+    color: var(--sf-text-muted);
+}
+
+.sf-reviews-verified {
+    display: inline-block;
+    font-size: 10px;
+    color: #4a9e4a;
+    border: 0.5px solid #1a3a1a;
+    padding: 2px 10px;
+    border-radius: 3px;
+    margin-bottom: 28px;
+}
+
+.sf-reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--sf-divider);
+}
+
+.sf-review-card {
+    background: var(--sf-bg-card);
+    padding: 18px;
+}
+
+.sf-review-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.sf-review-stars {
+    font-size: 11px;
+    color: var(--sf-text-secondary);
+}
+
+.sf-review-date {
+    font-size: 10px;
+    color: var(--sf-text-muted);
+}
+
+.sf-review-text {
+    font-size: 12px;
+    color: #666;
+    line-height: 1.7;
+    margin-bottom: 14px;
+}
+
+.sf-review-author {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sf-review-avatar {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--sf-divider);
+    border: 0.5px solid var(--sf-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    color: var(--sf-text-secondary);
+    font-weight: 500;
+    flex-shrink: 0;
+}
+
+.sf-review-name {
+    font-size: 11px;
+    color: var(--sf-text-secondary);
+}
+
+.sf-review-product {
+    font-size: 10px;
+    color: var(--sf-text-muted);
+}
+
+/* ─── Footer ───────────────────────────────────────────── */
+
+.sf-footer {
+    padding: 20px 32px;
+    border-top: 0.5px solid var(--sf-divider);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sf-footer-copy {
+    font-size: 11px;
+    color: var(--sf-text-muted);
+}
+
+.sf-footer-links {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+    .sf-footer-links a {
+        font-size: 11px;
+        color: var(--sf-text-muted);
+        text-decoration: none;
+        transition: color 0.15s;
+    }
+
+        .sf-footer-links a:hover {
+            color: var(--sf-text-secondary);
+        }
+
+/* ─── Empty state ──────────────────────────────────────── */
+
+.sf-empty {
+    grid-column: 1 / -1;
+    padding: 80px 32px;
+    text-align: center;
+    color: var(--sf-text-muted);
+    font-size: 13px;
+    background: var(--sf-bg-card);
+}

@@ -1,0 +1,28 @@
+﻿@model WebshopShop.ViewModels.Admin.CategoryViewModel
+
+@{
+    ViewData["Title"] = "Edit Category";
+}
+
+<div class="mb-3">
+    <a asp-controller="Category" asp-action="Index" class="text-muted text-decoration-none">← Back to Categories</a>
+</div>
+
+<h2 class="mb-1">Edit Category</h2>
+<p class="text-muted mb-4">Rename this webshop category.</p>
+
+<form asp-controller="Category" asp-action="Edit" method="post" style="max-width: 400px;">
+    @Html.AntiForgeryToken()
+    <input asp-for="Id" type="hidden" />
+
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label fw-semibold">Category Name</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger small"></span>
+    </div>
+
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+        <a asp-controller="Category" asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+    </div>
+</form>

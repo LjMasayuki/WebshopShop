@@ -1,0 +1,46 @@
+﻿@model IEnumerable<WebshopShop.Models.Manufacturer>
+
+@{
+    ViewData["Title"] = "Admin — Developers";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h2 class="mb-0">Developers & Agencies</h2>
+        <small class="text-muted">The teams and individuals who built the webshops</small>
+    </div>
+    <a asp-controller="Manufacturer" asp-action="Create" class="btn btn-primary">+ Add Developer</a>
+</div>
+
+<table class="table table-striped table-hover align-middle" style="max-width: 600px;">
+    <thead class="table-dark">
+        <tr>
+            <th>Name</th>
+            <th>Webshops</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var manufacturer in Model)
+        {
+            <tr>
+                <td><strong>@manufacturer.Name</strong></td>
+                <td><span class="text-muted">@manufacturer.Items.Count listings</span></td>
+                <td class="text-end">
+                    <a asp-controller="Manufacturer" asp-action="Edit" asp-route-id="@manufacturer.Id" class="btn btn-sm btn-outline-secondary">Edit</a>
+                    <form asp-controller="Manufacturer" asp-action="Delete" asp-route-id="@manufacturer.Id" method="post" class="d-inline"
+                          onsubmit="return confirm('Delete \'@manufacturer.Name\'?')">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+        @if (!Model.Any())
+        {
+            <tr>
+                <td colspan="3" class="text-center text-muted py-4">No developers listed yet.</td>
+            </tr>
+        }
+    </tbody>
+</table>
