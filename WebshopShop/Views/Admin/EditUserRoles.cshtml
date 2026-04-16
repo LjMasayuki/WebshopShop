@@ -1,0 +1,36 @@
+﻿@model WebshopShop.ViewModels.Admin.EditUserRolesViewModel
+
+@{
+ViewData["Title"] = "Edit Roles";
+}
+
+<div class="adm-header">
+    <div class="adm-header-left">
+        <p class="adm-breadcrumb"><a asp-controller="Admin" asp-action="Users">Users</a> / @Model.UserName</p>
+        <h1 class="adm-title">Edit Roles</h1>
+        <p class="adm-subtitle">@Model.Email</p>
+    </div>
+</div>
+
+<form asp-controller="Admin" asp-action="EditUserRoles" method="post" class="adm-form adm-form-narrow">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="UserId" value="@Model.UserId" />
+    <input type="hidden" name="UserName" value="@Model.UserName" />
+    <input type="hidden" name="Email" value="@Model.Email" />
+
+    @for (int i = 0; i < Model.Roles.Count; i++)
+                        {
+    <div class="adm-form-group" style="display:flex; align-items:center; gap:10px;">
+        <input type="hidden" name="Roles[@i].RoleName" value="@Model.Roles[i].RoleName" />
+        <input type="checkbox" name="Roles[@i].IsAssigned" value="true"
+               @(Model.Roles[i].IsAssigned ? "checked" : "" )
+               style="width:14px; height:14px; accent-color:#fff; cursor:pointer;" />
+        <label class="adm-form-label" style="margin:0;">@Model.Roles[i].RoleName</label>
+    </div>
+    }
+
+    <div class="adm-form-actions">
+        <button type="submit" class="adm-btn adm-btn-primary">Save Roles</button>
+        <a asp-controller="Admin" asp-action="Users" class="adm-btn adm-btn-ghost">Cancel</a>
+    </div>
+</form>

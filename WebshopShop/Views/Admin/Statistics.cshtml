@@ -1,0 +1,92 @@
+﻿@model WebshopShop.ViewModels.Admin.StatisticsViewModel
+
+@{
+ViewData["Title"] = "Statistics";
+}
+
+<div class="adm-header">
+    <div class="adm-header-left">
+        <p class="adm-breadcrumb">Admin</p>
+        <h1 class="adm-title">Statistics</h1>
+        <p class="adm-subtitle">Platform overview and sales data</p>
+    </div>
+</div>
+
+<div class="adm-stats-grid" style="margin-bottom: 2rem;">
+    <div class="adm-stat">
+        <p class="adm-stat-label">Total Revenue</p>
+        <p class="adm-stat-value">€@Model.TotalRevenue.ToString("0.00")</p>
+    </div>
+    <div class="adm-stat">
+        <p class="adm-stat-label">Total Orders</p>
+        <p class="adm-stat-value">@Model.TotalOrders</p>
+    </div>
+    <div class="adm-stat">
+        <p class="adm-stat-label">Total Users</p>
+        <p class="adm-stat-value">@Model.TotalUsers</p>
+    </div>
+    <div class="adm-stat">
+        <p class="adm-stat-label">Total Items</p>
+        <p class="adm-stat-value">@Model.TotalItems</p>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start;">
+
+    <div>
+        <p class="adm-breadcrumb" style="margin-bottom: 12px;">Top Selling Items</p>
+        <div class="adm-table-wrap">
+            <table class="adm-table">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Sales</th>
+                        <th>Revenue</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.TopItems.Any())
+                    {
+                    <tr><td colspan="3" class="adm-table-empty">No sales data yet.</td></tr>
+                    }
+                    @foreach (var item in Model.TopItems)
+                    {
+                    <tr>
+                        <td><strong>@item.Title</strong></td>
+                        <td><span class="adm-count">@item.SaleCount</span></td>
+                        <td>€@item.Revenue.ToString("0.00")</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div>
+        <p class="adm-breadcrumb" style="margin-bottom: 12px;">Revenue — Last 30 Days</p>
+        <div class="adm-table-wrap">
+            <table class="adm-table">
+                <thead>
+                    <tr>
+                        <th>Day</th>
+                        <th>Revenue</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.RevenueByDay.Any())
+                    {
+                    <tr><td colspan="2" class="adm-table-empty">No revenue data yet.</td></tr>
+                    }
+                    @foreach (var day in Model.RevenueByDay)
+                    {
+                    <tr>
+                        <td>@day.Day</td>
+                        <td>€@day.Revenue.ToString("0.00")</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>

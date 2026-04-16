@@ -1,223 +1,204 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebshopShop.Data;
-using WebshopShop.Models;
 using WebshopShop.ViewModels.Admin;
 
 namespace WebshopShop.Controllers
 {
     [Authorize(Roles = "Admin")]
-    public class AdminController(ApplicationDbContext db) : Controller
+    public class AdminController : Controller
     {
-        private readonly ApplicationDbContext _db = db;
+        private readonly ApplicationDbContext _db;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        // ─── Items ────────────────────────────────────────────────────────────
-
-        public async Task<IActionResult> Items()
+        public AdminController(
+            ApplicationDbContext db,
+            UserManager<IdentityUser> userManager,
+            RoleManager<IdentityRole> roleManager)
         {
-            var items = await _db.Items
-                .Include(i => i.Category)
-                .Include(i => i.Manufacturer)
+            _db = db;
+            _userManager = userManager;
+            _roleManager = roleManager;
+        }
+
+        // ─── Orders ───────────────────────────────────────────────────────────
+
+        public async Task<IActionResult> Orders()
+        {
+            var invoices = await _db.Invoices
+                .Include(i => i.User)
+                .Include(i => i.ItemInvoices)
+                .OrderByDescending(i => i.IssuedDate)
                 .ToListAsync();
-            return View("Item/Index", items);
-        }
 
-        public async Task<IActionResult> CreateItem()
-        {
-            return View("Item/Create", await BuildItemViewModelAsync(new ItemViewModel()));
-        }
-
-        [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateItem(ItemViewModel vm)
-        {
-            if (!ModelState.IsValid)
-                return View("Item/Create", await BuildItemViewModelAsync(vm));
-
-            _db.Items.Add(new Item
+            var vm = invoices.Select(i => new OrderListViewModel
             {
-                Title = vm.Title,
-                Description = vm.Description,
-                Price = vm.Price,
-                CategoryId = vm.CategoryId,
-                ManufacturerId = vm.ManufacturerId
-            });
+                Id = i.Id,
+                InvoiceNumber = i.InvoiceNumber,
+                UserName = i.User?.UserName ?? "—",
+                Email = i.User?.Email ?? "—",
+                Total = i.Total,
+                IssuedDate = i.IssuedDate,
+                ItemCount = i.ItemInvoices.Count
+            }).ToList();
 
-            await _db.SaveChangesAsync();
-            return RedirectToAction(nameof(Items));
+            return View("Orders", vm);
         }
 
-        public async Task<IActionResult> EditItem(int id)
+        public async Task<IActionResult> OrderDetail(int id)
         {
-            var item = await _db.Items.FindAsync(id);
-            if (item is null) return NotFound();
+            var invoice = await _db.Invoices
+                .Include(i => i.User)
+                .Include(i => i.CustomerAddress)
+                .Include(i => i.ItemInvoices)
+                    .ThenInclude(ii => ii.Item)
+                .FirstOrDefaultAsync(i => i.Id == id);
 
-            var vm = new ItemViewModel
+            if (invoice == null) return NotFound();
+
+            var vm = new OrderDetailViewModel
             {
-                Id = item.Id,
-                Title = item.Title,
-                Description = item.Description,
-                Price = item.Price,
-                CategoryId = item.CategoryId,
-                ManufacturerId = item.ManufacturerId
+                Id = invoice.Id,
+                InvoiceNumber = invoice.InvoiceNumber,
+                UserName = invoice.User?.UserName ?? "—",
+                Email = invoice.User?.Email ?? "—",
+                Total = invoice.Total,
+                IssuedDate = invoice.IssuedDate,
+                CustomerAddress = new AddressViewModel
+                {
+                    FirstName = invoice.CustomerAddress.FirstName,
+                    LastName = invoice.CustomerAddress.LastName,
+                    AddressLine1 = invoice.CustomerAddress.AddressLine1,
+                    AddressLine2 = invoice.CustomerAddress.AddressLine2,
+                    City = invoice.CustomerAddress.City,
+                    ZipCode = invoice.CustomerAddress.ZipCode,
+                    Country = invoice.CustomerAddress.Country,
+                    State = invoice.CustomerAddress.State
+                },
+                Items = invoice.ItemInvoices.Select(ii => new OrderItemViewModel
+                {
+                    Title = ii.Item?.Title ?? "—",
+                    Price = ii.Price
+                }).ToList()
             };
 
-            return View("Item/Edit", await BuildItemViewModelAsync(vm));
+            return View("OrderDetail", vm);
         }
 
-        [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditItem(ItemViewModel vm)
+        // ─── Users ────────────────────────────────────────────────────────────
+
+        public async Task<IActionResult> Users()
         {
-            if (!ModelState.IsValid)
-                return View("Item/Edit", await BuildItemViewModelAsync(vm));
+            var users = await _userManager.Users.ToListAsync();
 
-            var item = await _db.Items.FindAsync(vm.Id);
-            if (item is null) return NotFound();
-
-            item.Title = vm.Title;
-            item.Description = vm.Description;
-            item.Price = vm.Price;
-            item.CategoryId = vm.CategoryId;
-            item.ManufacturerId = vm.ManufacturerId;
-
-            await _db.SaveChangesAsync();
-            return RedirectToAction(nameof(Items));
-        }
-
-        [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteItem(int id)
-        {
-            var item = await _db.Items.FindAsync(id);
-            if (item is not null)
+            var vm = new List<UserListViewModel>();
+            foreach (var user in users)
             {
-                _db.Items.Remove(item);
-                await _db.SaveChangesAsync();
+                var roles = await _userManager.GetRolesAsync(user);
+                var orderCount = await _db.Invoices.CountAsync(i => i.UserId == user.Id);
+                vm.Add(new UserListViewModel
+                {
+                    Id = user.Id,
+                    UserName = user.UserName ?? "—",
+                    Email = user.Email ?? "—",
+                    Roles = roles.ToList(),
+                    OrderCount = orderCount
+                });
             }
-            return RedirectToAction(nameof(Items));
+
+            return View("Users", vm);
         }
 
-        // ─── Categories ───────────────────────────────────────────────────────
-
-        public async Task<IActionResult> Categories()
+        public async Task<IActionResult> EditUserRoles(string id)
         {
-            var categories = await _db.Categories
-                .Include(c => c.Items)
-                .ToListAsync();
-            return View("Category/Index", categories);
-        }
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null) return NotFound();
 
-        public IActionResult CreateCategory() => View("Category/Create", new CategoryViewModel());
+            var allRoles = await _roleManager.Roles.ToListAsync();
+            var userRoles = await _userManager.GetRolesAsync(user);
 
-        [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateCategory(CategoryViewModel vm)
-        {
-            if (!ModelState.IsValid) return View("Category/Create", vm);
-
-            _db.Categories.Add(new Category { Name = vm.Name });
-            await _db.SaveChangesAsync();
-            return RedirectToAction(nameof(Categories));
-        }
-
-        public async Task<IActionResult> EditCategory(int id)
-        {
-            var category = await _db.Categories.FindAsync(id);
-            if (category is null) return NotFound();
-            return View("Category/Edit", new CategoryViewModel { Id = category.Id, Name = category.Name });
-        }
-
-        [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditCategory(CategoryViewModel vm)
-        {
-            if (!ModelState.IsValid) return View("Category/Edit", vm);
-
-            var category = await _db.Categories.FindAsync(vm.Id);
-            if (category is null) return NotFound();
-
-            category.Name = vm.Name;
-            await _db.SaveChangesAsync();
-            return RedirectToAction(nameof(Categories));
-        }
-
-        [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteCategory(int id)
-        {
-            var category = await _db.Categories.FindAsync(id);
-            if (category is not null)
+            var vm = new EditUserRolesViewModel
             {
-                _db.Categories.Remove(category);
-                await _db.SaveChangesAsync();
-            }
-            return RedirectToAction(nameof(Categories));
+                UserId = user.Id,
+                UserName = user.UserName ?? "—",
+                Email = user.Email ?? "—",
+                Roles = allRoles.Select(r => new RoleToggleViewModel
+                {
+                    RoleName = r.Name ?? string.Empty,
+                    IsAssigned = userRoles.Contains(r.Name ?? string.Empty)
+                }).ToList()
+            };
+
+            return View("EditUserRoles", vm);
         }
 
-        // ─── Manufacturers ────────────────────────────────────────────────────
-
-        public async Task<IActionResult> Manufacturers()
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditUserRoles(EditUserRolesViewModel vm)
         {
-            var manufacturers = await _db.Manufacturers
-                .Include(m => m.Items)
+            var user = await _userManager.FindByIdAsync(vm.UserId);
+            if (user == null) return NotFound();
+
+            var currentRoles = await _userManager.GetRolesAsync(user);
+            await _userManager.RemoveFromRolesAsync(user, currentRoles);
+
+            var selectedRoles = vm.Roles
+                .Where(r => r.IsAssigned)
+                .Select(r => r.RoleName)
+                .ToList();
+
+            if (selectedRoles.Any())
+                await _userManager.AddToRolesAsync(user, selectedRoles);
+
+            return RedirectToAction(nameof(Users));
+        }
+
+        // ─── Statistics ───────────────────────────────────────────────────────
+
+        public async Task<IActionResult> Statistics()
+        {
+            var invoices = await _db.Invoices
+                .Include(i => i.ItemInvoices)
+                    .ThenInclude(ii => ii.Item)
                 .ToListAsync();
-            return View("Manufacturer/Index", manufacturers);
-        }
 
-        public IActionResult CreateManufacturer() => View("Manufacturer/Create", new ManufacturerViewModel());
+            var topItems = await _db.ItemInvoices
+                .Include(ii => ii.Item)
+                .GroupBy(ii => new { ii.ItemId, ii.Item.Title })
+                .Select(g => new TopItemViewModel
+                {
+                    Title = g.Key.Title,
+                    SaleCount = g.Count(),
+                    Revenue = g.Sum(ii => ii.Price)
+                })
+                .OrderByDescending(x => x.SaleCount)
+                .Take(5)
+                .ToListAsync();
 
-        [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateManufacturer(ManufacturerViewModel vm)
-        {
-            if (!ModelState.IsValid) return View("Manufacturer/Create", vm);
+            var revenueByDay = invoices
+                .GroupBy(i => i.IssuedDate.Date)
+                .OrderBy(g => g.Key)
+                .TakeLast(30)
+                .Select(g => new RevenueByDayViewModel
+                {
+                    Day = g.Key.ToString("MMM dd"),
+                    Revenue = g.Sum(i => i.Total)
+                })
+                .ToList();
 
-            _db.Manufacturers.Add(new Manufacturer { Name = vm.Name });
-            await _db.SaveChangesAsync();
-            return RedirectToAction(nameof(Manufacturers));
-        }
-
-        public async Task<IActionResult> EditManufacturer(int id)
-        {
-            var manufacturer = await _db.Manufacturers.FindAsync(id);
-            if (manufacturer is null) return NotFound();
-            return View("Manufacturer/Edit", new ManufacturerViewModel { Id = manufacturer.Id, Name = manufacturer.Name });
-        }
-
-        [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditManufacturer(ManufacturerViewModel vm)
-        {
-            if (!ModelState.IsValid) return View("Manufacturer/Edit", vm);
-
-            var manufacturer = await _db.Manufacturers.FindAsync(vm.Id);
-            if (manufacturer is null) return NotFound();
-
-            manufacturer.Name = vm.Name;
-            await _db.SaveChangesAsync();
-            return RedirectToAction(nameof(Manufacturers));
-        }
-
-        [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteManufacturer(int id)
-        {
-            var manufacturer = await _db.Manufacturers.FindAsync(id);
-            if (manufacturer is not null)
+            var vm = new StatisticsViewModel
             {
-                _db.Manufacturers.Remove(manufacturer);
-                await _db.SaveChangesAsync();
-            }
-            return RedirectToAction(nameof(Manufacturers));
-        }
+                TotalOrders = invoices.Count,
+                TotalRevenue = invoices.Sum(i => i.Total),
+                TotalUsers = await _userManager.Users.CountAsync(),
+                TotalItems = await _db.Items.CountAsync(),
+                TopItems = topItems,
+                RevenueByDay = revenueByDay
+            };
 
-        // ─── Helpers ──────────────────────────────────────────────────────────
-
-        private async Task<ItemViewModel> BuildItemViewModelAsync(ItemViewModel vm)
-        {
-            vm.Categories = await _db.Categories
-                .Select(c => new SelectListItem { Value = c.Id.ToString(), Text = c.Name })
-                .ToListAsync();
-
-            vm.Manufacturers = await _db.Manufacturers
-                .Select(m => new SelectListItem { Value = m.Id.ToString(), Text = m.Name })
-                .ToListAsync();
-
-            return vm;
+            return View("Statistics", vm);
         }
     }
 }

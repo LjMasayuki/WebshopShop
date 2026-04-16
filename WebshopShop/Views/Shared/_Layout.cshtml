@@ -25,10 +25,9 @@
                     <li><a asp-controller="Item" asp-action="Index">Webshops</a></li>
                     <li><a asp-controller="Category" asp-action="Index">Categories</a></li>
                     <li><a asp-controller="Manufacturer" asp-action="Index">Developers</a></li>
-                    @if (User.IsInRole("Admin"))
-                    {
+                    <li><a asp-controller="Admin" asp-action="Orders">Orders</a></li>
                     <li><a asp-controller="Admin" asp-action="Users">Users</a></li>
-                    }
+                    <li><a asp-controller="Admin" asp-action="Statistics">Statistics</a></li>
                 </ul>
             </li>
             <li><a asp-controller="Home" asp-action="Index" class="adm-nav-store">← Store</a></li>

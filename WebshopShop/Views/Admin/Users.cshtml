@@ -1,0 +1,60 @@
+﻿@model List<WebshopShop.ViewModels.Admin.UserListViewModel>
+
+@{
+ViewData["Title"] = "Users";
+}
+
+<div class="adm-header">
+    <div class="adm-header-left">
+        <p class="adm-breadcrumb">Admin</p>
+        <h1 class="adm-title">Users</h1>
+        <p class="adm-subtitle">All registered accounts on the platform</p>
+    </div>
+</div>
+
+<div class="adm-table-wrap">
+    <table class="adm-table">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Roles</th>
+                <th>Orders</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Any())
+            {
+            <tr><td colspan="5" class="adm-table-empty">No users yet.</td></tr>
+            }
+            @foreach (var user in Model)
+            {
+            <tr>
+                <td><strong>@user.UserName</strong></td>
+                <td>@user.Email</td>
+                <td>
+                    @if (user.Roles.Any())
+                    {
+                    @foreach (var role in user.Roles)
+                    {
+                    <span class="adm-badge" style="margin-right:4px;">@role</span>
+                    }
+                    }
+                    else
+                    {
+                    <span style="font-size:11px; color:#444;">—</span>
+                    }
+                </td>
+                <td><span class="adm-count">@user.OrderCount</span></td>
+                <td>
+                    <div class="adm-table-actions">
+                        <a asp-controller="Admin" asp-action="EditUserRoles" asp-route-id="@user.Id"
+                           class="adm-btn adm-btn-ghost adm-btn-sm">Edit Roles</a>
+                    </div>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>

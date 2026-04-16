@@ -1,0 +1,53 @@
+﻿@model List<WebshopShop.ViewModels.Admin.OrderListViewModel>
+
+@{
+ViewData["Title"] = "Orders";
+}
+
+<div class="adm-header">
+    <div class="adm-header-left">
+        <p class="adm-breadcrumb">Admin</p>
+        <h1 class="adm-title">Orders</h1>
+        <p class="adm-subtitle">All customer orders placed on the platform</p>
+    </div>
+</div>
+
+<div class="adm-table-wrap">
+    <table class="adm-table">
+        <thead>
+            <tr>
+                <th>Invoice</th>
+                <th>Customer</th>
+                <th>Items</th>
+                <th>Total</th>
+                <th>Date</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Any())
+            {
+            <tr><td colspan="6" class="adm-table-empty">No orders yet.</td></tr>
+            }
+            @foreach (var order in Model)
+            {
+            <tr>
+                <td><strong>@order.InvoiceNumber</strong></td>
+                <td>
+                    <strong>@order.UserName</strong>
+                    <small>@order.Email</small>
+                </td>
+                <td><span class="adm-count">@order.ItemCount</span></td>
+                <td>€@order.Total.ToString("0.00")</td>
+                <td>@order.IssuedDate.ToString("MMM dd, yyyy")</td>
+                <td>
+                    <div class="adm-table-actions">
+                        <a asp-controller="Admin" asp-action="OrderDetail" asp-route-id="@order.Id"
+                           class="adm-btn adm-btn-ghost adm-btn-sm">View</a>
+                    </div>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>

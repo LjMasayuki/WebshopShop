@@ -1,0 +1,64 @@
+﻿@model WebshopShop.ViewModels.Admin.OrderDetailViewModel
+
+@{
+ViewData["Title"] = "Order Detail";
+}
+
+<div class="adm-header">
+    <div class="adm-header-left">
+        <p class="adm-breadcrumb"><a asp-controller="Admin" asp-action="Orders">Orders</a> / @Model.InvoiceNumber</p>
+        <h1 class="adm-title">@Model.InvoiceNumber</h1>
+        <p class="adm-subtitle">@Model.IssuedDate.ToString("MMM dd, yyyy · HH:mm") UTC</p>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 320px; gap: 2rem; align-items: start;">
+
+    <div>
+        <div class="adm-table-wrap">
+            <table class="adm-table">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Items)
+                    {
+                    <tr>
+                        <td><strong>@item.Title</strong></td>
+                        <td>€@item.Price.ToString("0.00")</td>
+                    </tr>
+                    }
+                    <tr style="border-top: 0.5px solid #2a2a2a;">
+                        <td style="color:#888; font-size:11px; letter-spacing:0.08em; text-transform:uppercase;">Total</td>
+                        <td style="color:#fff; font-size:16px; font-weight:500;">€@Model.Total.ToString("0.00")</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+
+        <div style="background:#141414; border:0.5px solid #2a2a2a; border-radius:4px; padding:1.25rem;">
+            <p style="font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:#444; margin:0 0 12px;">Customer</p>
+            <p style="font-size:13px; color:#f0f0f0; margin:0 0 2px;">@Model.UserName</p>
+            <p style="font-size:12px; color:#888; margin:0;">@Model.Email</p>
+        </div>
+
+        <div style="background:#141414; border:0.5px solid #2a2a2a; border-radius:4px; padding:1.25rem;">
+            <p style="font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:#444; margin:0 0 12px;">Shipping Address</p>
+            <p style="font-size:13px; color:#f0f0f0; margin:0 0 2px;">@Model.CustomerAddress.FirstName @Model.CustomerAddress.LastName</p>
+            <p style="font-size:12px; color:#888; margin:0 0 2px;">@Model.CustomerAddress.AddressLine1</p>
+            @if (!string.IsNullOrWhiteSpace(Model.CustomerAddress.AddressLine2))
+            {
+            <p style="font-size:12px; color:#888; margin:0 0 2px;">@Model.CustomerAddress.AddressLine2</p>
+            }
+            <p style="font-size:12px; color:#888; margin:0 0 2px;">@Model.CustomerAddress.ZipCode @Model.CustomerAddress.City</p>
+            <p style="font-size:12px; color:#888; margin:0;">@Model.CustomerAddress.Country</p>
+        </div>
+
+    </div>
+</div>
