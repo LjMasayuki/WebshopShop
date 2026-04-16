@@ -1,27 +1,28 @@
 ﻿@model WebshopShop.ViewModels.Admin.ManufacturerViewModel
 
 @{
-    ViewData["Title"] = "Add Developer";
+ViewData["Title"] = "Add Developer";
 }
 
-<div class="mb-3">
-    <a asp-controller="Manufacturer" asp-action="Index" class="text-muted text-decoration-none">← Back to Developers</a>
+<div class="adm-header">
+    <div class="adm-header-left">
+        <p class="adm-breadcrumb"><a asp-controller="Manufacturer" asp-action="Index">Developers</a> / New</p>
+        <h1 class="adm-title">Add Developer</h1>
+        <p class="adm-subtitle">Register a developer or agency whose webshops are sold on the platform.</p>
+    </div>
 </div>
 
-<h2 class="mb-1">Add Developer / Agency</h2>
-<p class="text-muted mb-4">Register a developer or agency whose webshops are sold on the platform.</p>
-
-<form asp-controller="Manufacturer" asp-action="Create" method="post" style="max-width: 400px;">
+<form asp-controller="Manufacturer" asp-action="Create" method="post" class="adm-form adm-form-narrow">
     @Html.AntiForgeryToken()
 
-    <div class="mb-3">
-        <label asp-for="Name" class="form-label fw-semibold">Developer / Agency Name</label>
-        <input asp-for="Name" class="form-control" placeholder="e.g. Acme Web Studios" />
-        <span asp-validation-for="Name" class="text-danger small"></span>
+    <div class="adm-form-group">
+        <label asp-for="Name" class="adm-form-label">Developer / Agency Name</label>
+        <input asp-for="Name" class="adm-form-input" placeholder="e.g. Acme Web Studios" />
+        <span asp-validation-for="Name" class="adm-form-error"></span>
     </div>
 
-    <div class="d-flex gap-2">
-        <button type="submit" class="btn btn-primary">Add Developer</button>
-        <a asp-controller="Manufacturer" asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+    <div class="adm-form-actions">
+        <button type="submit" class="adm-btn adm-btn-primary">Add Developer</button>
+        <a asp-controller="Manufacturer" asp-action="Index" class="adm-btn adm-btn-ghost">Cancel</a>
     </div>
 </form>

@@ -1,28 +1,29 @@
 ﻿@model WebshopShop.ViewModels.Admin.ManufacturerViewModel
 
 @{
-    ViewData["Title"] = "Edit Developer";
+ViewData["Title"] = "Edit Developer";
 }
 
-<div class="mb-3">
-    <a asp-controller="Manufacturer" asp-action="Index" class="text-muted text-decoration-none">← Back to Developers</a>
+<div class="adm-header">
+    <div class="adm-header-left">
+        <p class="adm-breadcrumb"><a asp-controller="Manufacturer" asp-action="Index">Developers</a> / Edit</p>
+        <h1 class="adm-title">Edit Developer</h1>
+        <p class="adm-subtitle">Update the name of this developer or agency.</p>
+    </div>
 </div>
 
-<h2 class="mb-1">Edit Developer / Agency</h2>
-<p class="text-muted mb-4">Update the name of this developer or agency.</p>
-
-<form asp-controller="Manufacturer" asp-action="Edit" method="post" style="max-width: 400px;">
+<form asp-controller="Manufacturer" asp-action="Edit" method="post" class="adm-form adm-form-narrow">
     @Html.AntiForgeryToken()
     <input asp-for="Id" type="hidden" />
 
-    <div class="mb-3">
-        <label asp-for="Name" class="form-label fw-semibold">Developer / Agency Name</label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger small"></span>
+    <div class="adm-form-group">
+        <label asp-for="Name" class="adm-form-label">Developer / Agency Name</label>
+        <input asp-for="Name" class="adm-form-input" />
+        <span asp-validation-for="Name" class="adm-form-error"></span>
     </div>
 
-    <div class="d-flex gap-2">
-        <button type="submit" class="btn btn-primary">Save Changes</button>
-        <a asp-controller="Manufacturer" asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+    <div class="adm-form-actions">
+        <button type="submit" class="adm-btn adm-btn-primary">Save Changes</button>
+        <a asp-controller="Manufacturer" asp-action="Index" class="adm-btn adm-btn-ghost">Cancel</a>
     </div>
 </form>

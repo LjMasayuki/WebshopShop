@@ -1,46 +1,51 @@
 ﻿@model IEnumerable<WebshopShop.Models.Category>
 
 @{
-    ViewData["Title"] = "Admin — Categories";
+ViewData["Title"] = "Categories";
 }
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <div>
-        <h2 class="mb-0">Categories</h2>
-        <small class="text-muted">Webshop types e.g. E-Commerce, SaaS, Portfolio</small>
+<div class="adm-header">
+    <div class="adm-header-left">
+        <p class="adm-breadcrumb">Admin</p>
+        <h1 class="adm-title">Categories</h1>
+        <p class="adm-subtitle">Webshop types e.g. E-Commerce, SaaS, Portfolio</p>
     </div>
-    <a asp-controller="Category" asp-action="Create" class="btn btn-primary">+ Add Category</a>
+    <a asp-controller="Category" asp-action="Create" class="adm-btn adm-btn-primary">+ Add Category</a>
 </div>
 
-<table class="table table-striped table-hover align-middle" style="max-width: 600px;">
-    <thead class="table-dark">
-        <tr>
-            <th>Name</th>
-            <th>Webshops</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var category in Model)
-        {
+<div class="adm-table-wrap" style="max-width: 600px;">
+    <table class="adm-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Listings</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Any())
+            {
+            <tr><td colspan="3" class="adm-table-empty">No categories yet.</td></tr>
+            }
+            @foreach (var category in Model)
+            {
             <tr>
                 <td><strong>@category.Name</strong></td>
-                <td><span class="text-muted">@category.Items.Count listings</span></td>
-                <td class="text-end">
-                    <a asp-controller="Category" asp-action="Edit" asp-route-id="@category.Id" class="btn btn-sm btn-outline-secondary">Edit</a>
-                    <form asp-controller="Category" asp-action="Delete" asp-route-id="@category.Id" method="post" class="d-inline"
-                          onsubmit="return confirm('Delete category \'@category.Name\'?')">
-                        @Html.AntiForgeryToken()
-                        <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
-                    </form>
+                <td><span class="adm-count">@category.Items.Count</span></td>
+                <td>
+                    <div class="adm-table-actions">
+                        <a asp-controller="Category" asp-action="Edit" asp-route-id="@category.Id"
+                           class="adm-btn adm-btn-ghost adm-btn-sm">Edit</a>
+                        <form asp-controller="Category" asp-action="Delete" asp-route-id="@category.Id"
+                              method="post" style="display:inline"
+                              onsubmit="return confirm('Delete category \'@category.Name\'?')">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="adm-btn adm-btn-danger adm-btn-sm">Delete</button>
+                        </form>
+                    </div>
                 </td>
             </tr>
-        }
-        @if (!Model.Any())
-        {
-            <tr>
-                <td colspan="3" class="text-center text-muted py-4">No categories yet.</td>
-            </tr>
-        }
-    </tbody>
-</table>
+            }
+        </tbody>
+    </table>
+</div>

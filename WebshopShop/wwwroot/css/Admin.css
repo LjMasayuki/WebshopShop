@@ -1,0 +1,560 @@
+﻿/* ─── Admin Shell — adm- prefix ────────────────────────────
+   Shares the same CSS variables as storefront.css.
+   Import AFTER storefront.css in _Layout.cshtml.
+   ──────────────────────────────────────────────────────── */
+
+/* ─── Reset & base ─────────────────────────────────────── */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body.admin {
+    background: #0f0f0f;
+    color: #f0f0f0;
+    font-family: 'DM Mono', 'Fira Mono', ui-monospace, monospace;
+    margin: 0;
+    min-height: 100vh;
+}
+
+/* ─── Top nav ───────────────────────────────────────────── */
+
+.adm-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    height: 48px;
+    border-bottom: 0.5px solid #1a1a1a;
+    background: #0f0f0f;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.adm-nav-brand {
+    font-size: 13px;
+    font-weight: 400;
+    color: #444;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.adm-nav-brand-sep {
+    color: #444;
+    font-size: 16px;
+    font-weight: 200;
+}
+
+.adm-nav-brand-section {
+    color: #888;
+    letter-spacing: 0.06em;
+}
+
+.adm-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+    .adm-nav-links li {
+        border-left: 0.5px solid #1a1a1a;
+    }
+
+    .adm-nav-links a,
+    .adm-nav-links button {
+        display: block;
+        padding: 0 18px;
+        height: 48px;
+        line-height: 48px;
+        font-size: 13px;
+        letter-spacing: 0.04em;
+        color: #888;
+        text-decoration: none;
+        background: none;
+        border: none;
+        cursor: pointer;
+        transition: color 0.15s, background 0.15s;
+        white-space: nowrap;
+        font-family: 'DM Mono', 'Fira Mono', ui-monospace, monospace;
+    }
+
+        .adm-nav-links a:hover,
+        .adm-nav-links button:hover {
+            color: #fff;
+            background: #141414;
+        }
+
+        .adm-nav-links a.active {
+            color: #fff;
+            background: #141414;
+        }
+
+    .adm-nav-links .adm-nav-danger:hover {
+        color: #cc4444;
+    }
+
+    .adm-nav-links .adm-nav-store {
+        color: #888;
+    }
+
+/* ─── Page layout ───────────────────────────────────────── */
+
+.adm-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 32px 80px;
+}
+
+@media (max-width: 768px) {
+    .adm-page {
+        padding: 24px 16px 60px;
+    }
+
+    .adm-nav {
+        padding: 0 16px;
+    }
+}
+
+/* ─── Page header ───────────────────────────────────────── */
+
+.adm-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding-bottom: 20px;
+    border-bottom: 0.5px solid #1a1a1a;
+    margin-bottom: 28px;
+    gap: 1rem;
+}
+
+.adm-breadcrumb {
+    font-size: 12px;
+    color: #444;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+}
+
+    .adm-breadcrumb a {
+        color: #444;
+        text-decoration: none;
+    }
+
+        .adm-breadcrumb a:hover {
+            color: #888;
+        }
+
+.adm-title {
+    font-size: 22px;
+    font-weight: 400;
+    color: #fff;
+    margin: 0;
+    letter-spacing: -0.01em;
+}
+
+.adm-subtitle {
+    font-size: 13px;
+    color: #444;
+    margin: 4px 0 0;
+    letter-spacing: 0.02em;
+}
+
+/* ─── Buttons ───────────────────────────────────────────── */
+
+.adm-btn {
+    display: inline-block;
+    font-size: 12px;
+    font-family: 'DM Mono', 'Fira Mono', ui-monospace, monospace;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 9px 18px;
+    border-radius: 3px;
+    border: 0.5px solid #2a2a2a;
+    cursor: pointer;
+    text-decoration: none;
+    transition: color 0.15s, background 0.15s, border-color 0.15s;
+    white-space: nowrap;
+}
+
+.adm-btn-primary {
+    background: #fff;
+    color: #0f0f0f;
+    border-color: #fff;
+}
+
+    .adm-btn-primary:hover {
+        background: #f0f0f0;
+        color: #0f0f0f;
+    }
+
+.adm-btn-ghost {
+    background: transparent;
+    color: #888;
+}
+
+    .adm-btn-ghost:hover {
+        color: #fff;
+        border-color: #888;
+    }
+
+.adm-btn-danger {
+    background: transparent;
+    color: #888;
+    border-color: #2a2a2a;
+}
+
+    .adm-btn-danger:hover {
+        color: #cc4444;
+        border-color: #cc4444;
+    }
+
+.adm-btn-sm {
+    font-size: 11px;
+    padding: 5px 12px;
+}
+
+/* ─── Table ─────────────────────────────────────────────── */
+
+.adm-table-wrap {
+    border: 0.5px solid #2a2a2a;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.adm-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+    .adm-table thead {
+        background: #141414;
+        border-bottom: 0.5px solid #2a2a2a;
+    }
+
+        .adm-table thead th {
+            padding: 11px 16px;
+            font-size: 11px;
+            font-weight: 400;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #444;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+    .adm-table tbody tr {
+        border-bottom: 0.5px solid #1a1a1a;
+        transition: background 0.1s;
+    }
+
+        .adm-table tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        .adm-table tbody tr:hover {
+            background: #141414;
+        }
+
+    .adm-table td {
+        padding: 13px 16px;
+        vertical-align: middle;
+        color: #888;
+    }
+
+        .adm-table td strong {
+            color: #f0f0f0;
+            font-weight: 500;
+        }
+
+        .adm-table td small {
+            font-size: 11px;
+            color: #444;
+            display: block;
+            margin-top: 2px;
+        }
+
+.adm-table-actions {
+    text-align: right;
+    white-space: nowrap;
+    display: flex;
+    gap: 6px;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.adm-table-empty {
+    text-align: center;
+    padding: 48px 16px;
+    color: #444;
+    font-size: 13px;
+}
+
+/* ─── Badge ─────────────────────────────────────────────── */
+
+.adm-badge {
+    display: inline-block;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 3px;
+    border: 0.5px solid #2a2a2a;
+    color: #444;
+}
+
+.adm-badge-ecom {
+    background: #1a1a2e;
+    color: #6666cc;
+    border-color: #1a1a2e;
+}
+
+.adm-badge-saas {
+    background: #0d1f0d;
+    color: #4a9e4a;
+    border-color: #0d1f0d;
+}
+
+.adm-badge-port {
+    background: #1f1510;
+    color: #cc7733;
+    border-color: #1f1510;
+}
+
+.adm-badge-blog {
+    background: #1a1218;
+    color: #cc4488;
+    border-color: #1a1218;
+}
+
+.adm-badge-crm {
+    background: #101a1a;
+    color: #33aaaa;
+    border-color: #101a1a;
+}
+
+.adm-badge-fin {
+    background: #1a1610;
+    color: #ccaa33;
+    border-color: #1a1610;
+}
+
+/* ─── Form ──────────────────────────────────────────────── */
+
+.adm-form {
+    max-width: 560px;
+}
+
+.adm-form-narrow {
+    max-width: 360px;
+}
+
+.adm-form-group {
+    margin-bottom: 18px;
+}
+
+.adm-form-label {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 8px;
+}
+
+.adm-form-optional {
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 11px;
+    color: #444;
+}
+
+.adm-form-input,
+.adm-form-select,
+.adm-form-textarea {
+    width: 100%;
+    background: #141414;
+    border: 0.5px solid #2a2a2a;
+    border-radius: 3px;
+    color: #f0f0f0;
+    font-size: 14px;
+    padding: 10px 12px;
+    font-family: 'DM Mono', 'Fira Mono', ui-monospace, monospace;
+    transition: border-color 0.15s;
+    appearance: none;
+}
+
+    .adm-form-input:focus,
+    .adm-form-select:focus,
+    .adm-form-textarea:focus {
+        outline: none;
+        border-color: #888;
+    }
+
+    .adm-form-input::placeholder,
+    .adm-form-textarea::placeholder {
+        color: #444;
+    }
+
+.adm-form-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+    cursor: pointer;
+}
+
+    .adm-form-select option {
+        background: #141414;
+        color: #f0f0f0;
+    }
+
+.adm-form-textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.adm-form-error {
+    font-size: 11px;
+    color: #cc4444;
+    margin-top: 4px;
+    display: block;
+}
+
+.adm-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+@media (max-width: 500px) {
+    .adm-form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+.adm-input-prefix-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.adm-input-prefix {
+    position: absolute;
+    left: 12px;
+    font-size: 14px;
+    color: #444;
+    pointer-events: none;
+}
+
+    .adm-input-prefix + .adm-form-input {
+        padding-left: 24px;
+    }
+
+.adm-form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 0.5px solid #1a1a1a;
+}
+
+/* ─── Count chip ────────────────────────────────────────── */
+
+.adm-count {
+    font-size: 11px;
+    color: #444;
+    border: 0.5px solid #1a1a1a;
+    padding: 1px 7px;
+    border-radius: 20px;
+}
+
+/* ─── Stat cards ────────────────────────────────────────── */
+
+.adm-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: #1a1a1a;
+    border: 0.5px solid #2a2a2a;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 32px;
+}
+
+.adm-stat {
+    background: #141414;
+    padding: 20px 20px 18px;
+}
+
+.adm-stat-label {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #444;
+    margin-bottom: 8px;
+}
+
+.adm-stat-value {
+    font-size: 26px;
+    font-weight: 400;
+    color: #fff;
+    line-height: 1;
+}
+
+.adm-stat-sub {
+    font-size: 11px;
+    color: #444;
+    margin-top: 4px;
+}
+
+@media (max-width: 700px) {
+    .adm-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ─── Nav dropdown ──────────────────────────────────────── */
+
+.adm-nav-dropdown {
+    position: relative;
+}
+
+.adm-nav-dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #141414;
+    border: 0.5px solid #2a2a2a;
+    border-top: none;
+    min-width: 180px;
+    z-index: 200;
+    padding: 4px 0;
+    list-style: none;
+    margin: 0;
+}
+
+.adm-nav-dropdown:hover .adm-nav-dropdown-menu {
+    display: block;
+}
+
+.adm-nav-dropdown-menu li {
+    list-style: none;
+    border-left: none;
+}
+
+.adm-nav-dropdown-menu a {
+    display: block;
+    padding: 0 20px;
+    height: 38px;
+    line-height: 38px;
+    font-size: 13px;
+} }

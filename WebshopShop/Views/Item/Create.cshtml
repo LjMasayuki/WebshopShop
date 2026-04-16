@@ -1,61 +1,62 @@
 ﻿@model WebshopShop.ViewModels.Admin.ItemViewModel
 
 @{
-    ViewData["Title"] = "Add Webshop";
+ViewData["Title"] = "Add Webshop";
 }
 
-<div class="mb-3">
-    <a asp-controller="Item" asp-action="Index" class="text-muted text-decoration-none">← Back to Webshops</a>
+<div class="adm-header">
+    <div class="adm-header-left">
+        <p class="adm-breadcrumb"><a asp-controller="Item" asp-action="Index">Webshops</a> / New</p>
+        <h1 class="adm-title">Add Webshop</h1>
+        <p class="adm-subtitle">List a new webshop product on the platform.</p>
+    </div>
 </div>
 
-<h2 class="mb-1">Add Webshop</h2>
-<p class="text-muted mb-4">List a new webshop product on the platform.</p>
-
-<form asp-controller="Item" asp-action="Create" method="post" style="max-width: 640px;">
+<form asp-controller="Item" asp-action="Create" method="post" class="adm-form">
     @Html.AntiForgeryToken()
 
-    <div class="mb-3">
-        <label asp-for="Title" class="form-label fw-semibold">Webshop Name</label>
-        <input asp-for="Title" class="form-control" placeholder="e.g. FreshMart E-Commerce Starter" />
-        <span asp-validation-for="Title" class="text-danger small"></span>
+    <div class="adm-form-group">
+        <label asp-for="Title" class="adm-form-label">Webshop Name</label>
+        <input asp-for="Title" class="adm-form-input" placeholder="e.g. FreshMart E-Commerce Starter" />
+        <span asp-validation-for="Title" class="adm-form-error"></span>
     </div>
 
-    <div class="mb-3">
-        <label asp-for="Description" class="form-label fw-semibold">Description</label>
-        <textarea asp-for="Description" class="form-control" rows="4"
-                  placeholder="Describe what this webshop includes, its tech stack, features, and ideal use case."></textarea>
-        <span asp-validation-for="Description" class="text-danger small"></span>
+    <div class="adm-form-group">
+        <label asp-for="Description" class="adm-form-label">Description</label>
+        <textarea asp-for="Description" class="adm-form-textarea" rows="4"
+                  placeholder="Describe the tech stack, features, and ideal use case."></textarea>
+        <span asp-validation-for="Description" class="adm-form-error"></span>
     </div>
 
-    <div class="mb-3">
-        <label asp-for="Price" class="form-label fw-semibold">Price (€)</label>
-        <div class="input-group">
-            <span class="input-group-text">€</span>
-            <input asp-for="Price" class="form-control" type="number" step="0.01" min="0" placeholder="0.00" />
+    <div class="adm-form-group">
+        <label asp-for="Price" class="adm-form-label">Price</label>
+        <div class="adm-input-prefix-wrap">
+            <span class="adm-input-prefix">€</span>
+            <input asp-for="Price" class="adm-form-input" type="number" step="0.01" min="0" placeholder="0.00" />
         </div>
-        <span asp-validation-for="Price" class="text-danger small"></span>
+        <span asp-validation-for="Price" class="adm-form-error"></span>
     </div>
 
-    <div class="row">
-        <div class="col mb-3">
-            <label asp-for="CategoryId" class="form-label fw-semibold">Category</label>
-            <select asp-for="CategoryId" asp-items="Model.Categories" class="form-select">
+    <div class="adm-form-row">
+        <div class="adm-form-group">
+            <label asp-for="CategoryId" class="adm-form-label">Category</label>
+            <select asp-for="CategoryId" asp-items="Model.Categories" class="adm-form-select">
                 <option value="">— Select category —</option>
             </select>
-            <span asp-validation-for="CategoryId" class="text-danger small"></span>
+            <span asp-validation-for="CategoryId" class="adm-form-error"></span>
         </div>
 
-        <div class="col mb-3">
-            <label asp-for="ManufacturerId" class="form-label fw-semibold">Developer / Agency</label>
-            <select asp-for="ManufacturerId" asp-items="Model.Manufacturers" class="form-select">
+        <div class="adm-form-group">
+            <label asp-for="ManufacturerId" class="adm-form-label">Developer / Agency</label>
+            <select asp-for="ManufacturerId" asp-items="Model.Manufacturers" class="adm-form-select">
                 <option value="">— Select developer —</option>
             </select>
-            <span asp-validation-for="ManufacturerId" class="text-danger small"></span>
+            <span asp-validation-for="ManufacturerId" class="adm-form-error"></span>
         </div>
     </div>
 
-    <div class="d-flex gap-2 mt-2">
-        <button type="submit" class="btn btn-primary">Add Webshop</button>
-        <a asp-controller="Item" asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+    <div class="adm-form-actions">
+        <button type="submit" class="adm-btn adm-btn-primary">Add Webshop</button>
+        <a asp-controller="Item" asp-action="Index" class="adm-btn adm-btn-ghost">Cancel</a>
     </div>
 </form>
