@@ -57,7 +57,7 @@
             ? Math.Round(item.Reviews.Average(r => (double)r.Score), 1)
             : 0;
 
-        <a class="sf-card" asp-controller="Item" asp-action="Details" asp-route-id="@item.Id">
+        <a class="sf-card" asp-controller="ItemDetail" asp-action="Index" asp-route-id="@item.Id">
             <div class="sf-card-img" style="background: @cardBg;">
                 <span class="sf-card-badge @badgeClass">@item.Category.Name</span>
                 <div class="sf-card-screen">

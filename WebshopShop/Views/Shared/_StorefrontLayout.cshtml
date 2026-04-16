@@ -14,29 +14,29 @@
             <li><a asp-controller="Home" asp-action="Index">Browse</a></li>
             @if (User.IsInRole("Admin"))
             {
-                <li class="sf-nav-dropdown" style="position:relative;">
-                    <a href="#" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='block'?'none':'block'; return false;"
-                       style="font-size:12px; color:#888; text-decoration:none;">Admin ▾</a>
-                    <ul style="display:none; position:absolute; top:24px; left:0; background:#141414; border:0.5px solid #2a2a2a; border-radius:6px; padding:6px 0; list-style:none; min-width:160px; z-index:200;">
-                        <li><a asp-controller="Item" asp-action="Index" style="display:block;padding:7px 16px;font-size:12px;color:#888;text-decoration:none;">Webshops</a></li>
-                        <li><a asp-controller="Category" asp-action="Index" style="display:block;padding:7px 16px;font-size:12px;color:#888;text-decoration:none;">Categories</a></li>
-                        <li><a asp-controller="Manufacturer" asp-action="Index" style="display:block;padding:7px 16px;font-size:12px;color:#888;text-decoration:none;">Developers</a></li>
-                    </ul>
-                </li>
+            <li class="sf-nav-dropdown" style="position:relative;">
+                <a href="#" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='block'?'none':'block'; return false;"
+                   style="font-size:12px; color:#888; text-decoration:none;">Admin ▾</a>
+                <ul style="display:none; position:absolute; top:24px; left:0; background:#141414; border:0.5px solid #2a2a2a; border-radius:6px; padding:6px 0; list-style:none; min-width:160px; z-index:200;">
+                    <li><a asp-controller="Item" asp-action="Index" style="display:block;padding:7px 16px;font-size:12px;color:#888;text-decoration:none;">Webshops</a></li>
+                    <li><a asp-controller="Category" asp-action="Index" style="display:block;padding:7px 16px;font-size:12px;color:#888;text-decoration:none;">Categories</a></li>
+                    <li><a asp-controller="Manufacturer" asp-action="Index" style="display:block;padding:7px 16px;font-size:12px;color:#888;text-decoration:none;">Developers</a></li>
+                </ul>
+            </li>
             }
             @if (User.Identity!.IsAuthenticated)
             {
-                <li><a asp-area="Identity" asp-page="/Account/Manage/Index">Account</a></li>
-                <li>
-                    <form asp-area="Identity" asp-page="/Account/Logout" method="post" style="display:inline">
-                        @Html.AntiForgeryToken()
-                        <button type="submit" style="background:none;border:none;padding:0;font-size:12px;color:#888;cursor:pointer;">Sign out</button>
-                    </form>
-                </li>
+            <li><a asp-area="Identity" asp-page="/Account/Manage/Index">Account</a></li>
+            <li>
+                <form asp-area="Identity" asp-page="/Account/Logout" method="post" style="display:inline">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" style="background:none;border:none;padding:0;font-size:12px;color:#888;cursor:pointer;">Sign out</button>
+                </form>
+            </li>
             }
             else
             {
-                <li><a asp-area="Identity" asp-page="/Account/Login" class="sf-nav-cta">Sign in</a></li>
+            <li><a asp-area="Identity" asp-page="/Account/Login" class="sf-nav-cta">Sign in</a></li>
             }
             <li><a asp-controller="Cart" asp-action="Index" class="sf-nav-cart">Cart</a></li>
         </ul>

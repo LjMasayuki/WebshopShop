@@ -1,0 +1,82 @@
+﻿@model WebshopShop.ViewModels.CartViewModel
+@{
+Layout = "~/Views/Shared/_StorefrontLayout.cshtml";
+ViewData["Title"] = "Your Cart";
+}
+
+<div class="sf-page">
+
+    <div class="sf-detail-back">
+        <a href="/" class="sf-back-link">← Back to Browse</a>
+    </div>
+
+    <div class="sf-cart-header">
+        <h1 class="sf-cart-title">Your Cart</h1>
+        @if (Model.Items.Any())
+        {
+        <span class="sf-cart-count">@Model.Items.Count item@(Model.Items.Count == 1 ? "" : "s")</span>
+        }
+    </div>
+
+    @if (!Model.Items.Any())
+    {
+    <div class="sf-cart-empty">
+        <p>Your cart is empty.</p>
+        <a href="/" class="sf-detail-btn">Browse Webshops</a>
+    </div>
+    }
+    else
+    {
+    <div class="sf-cart-list">
+        @foreach (var item in Model.Items)
+        {
+        <div class="sf-cart-item">
+            <div class="sf-cart-item-img">
+                @if (item.PictureId.HasValue)
+                {
+                <img src="/ItemDetail/GetImage/@item.PictureId" alt="@item.Title" />
+                }
+                else
+                {
+                <div class="sf-cart-item-placeholder">
+                    <div class="sf-screen-line" style="width:60%"></div>
+                    <div class="sf-screen-line" style="width:40%"></div>
+                </div>
+                }
+            </div>
+
+            <div class="sf-cart-item-info">
+                <p class="sf-cart-item-title">@item.Title</p>
+                <p class="sf-cart-item-category">@item.CategoryName</p>
+            </div>
+
+            <div class="sf-cart-item-qty">
+                x @item.Quantity
+            </div>
+
+            <div class="sf-cart-item-price">
+                €@item.Price.ToString("0.00")
+            </div>
+
+            <form action="/Cart/Remove" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="itemId" value="@item.ItemId" />
+                <button type="submit" class="sf-cart-remove">Remove</button>
+            </form>
+        </div>
+        }
+    </div>
+
+    <div class="sf-cart-footer">
+        <div class="sf-cart-total">
+            <span class="sf-cart-total-label">Total</span>
+            <span class="sf-cart-total-price">€@Model.Total.ToString("0.00")</span>
+        </div>
+        <form action="/Invoice/Checkout" method="get">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="sf-detail-btn">Proceed to Checkout</button>
+        </form>
+    </div>
+    }
+
+</div>

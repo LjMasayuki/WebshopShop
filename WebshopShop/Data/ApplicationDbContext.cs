@@ -54,9 +54,18 @@ namespace WebshopShop.Data
                 .Property(itemInvoice => itemInvoice.Price)
                 .HasPrecision(18, 2);
 
-            modelBuilder.Entity<Review>()
-                .Property(review => review.Score)
-                .HasPrecision(3, 1);
+            modelBuilder.Entity<Review>(entity =>
+            {
+                entity.HasKey(r => r.Id);
+                entity.Property(r => r.Score).HasPrecision(3, 1);
+                entity.Property(r => r.Comment).HasMaxLength(1000);
+                entity.HasOne(r => r.Item)
+                      .WithMany(i => i.Reviews)
+                      .HasForeignKey(r => r.ItemId);
+                entity.HasOne(r => r.User)
+                      .WithMany()
+                      .HasForeignKey(r => r.UserId);
+            });
         }
     }
 }

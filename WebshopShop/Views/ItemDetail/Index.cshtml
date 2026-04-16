@@ -1,0 +1,194 @@
+﻿@model WebshopShop.ViewModels.ItemDetailViewModel
+@{
+Layout = "~/Views/Shared/_StorefrontLayout.cshtml";
+ViewData["Title"] = Model.Title;
+}
+
+<div class="sf-page">
+
+    <div class="sf-detail-back">
+        <a href="/" class="sf-back-link">← Back to Browse</a>
+    </div>
+
+    <div class="sf-detail-grid">
+        <div class="sf-detail-images">
+            @if (Model.PictureIds.Any())
+            {
+            <div class="sf-detail-img-main">
+                <img id="sf-main-img" src="/ItemDetail/GetImage/@Model.PictureIds.First()" alt="@Model.Title" />
+            </div>
+            @if (Model.PictureIds.Count > 1)
+            {
+            <div class="sf-detail-img-thumbs">
+                @foreach (var picId in Model.PictureIds)
+                {
+                <img src="/ItemDetail/GetImage/@picId" alt="@Model.Title"
+                     class="sf-detail-thumb"
+                     onclick="document.getElementById('sf-main-img').src=this.src" />
+                }
+            </div>
+            }
+            }
+            else
+            {
+            <div class="sf-detail-img-placeholder">
+                <div class="sf-card-screen">
+                    <div class="sf-screen-bar">
+                        <div class="sf-screen-dot"></div>
+                        <div class="sf-screen-dot"></div>
+                    </div>
+                    <div class="sf-screen-body">
+                        <div class="sf-screen-line"></div>
+                        <div class="sf-screen-line" style="width:60%"></div>
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+
+        <div class="sf-detail-info">
+            <div class="sf-detail-meta">
+                <span class="sf-detail-category">@Model.CategoryName</span>
+                <span class="sf-detail-manufacturer">by @Model.ManufacturerName</span>
+            </div>
+
+            <h1 class="sf-detail-title">@Model.Title</h1>
+
+            <div class="sf-detail-score">
+                @if (Model.ReviewCount > 0)
+                {
+                <span class="sf-detail-stars">@Model.AverageScore ★</span>
+                <span class="sf-detail-review-count">(@Model.ReviewCount reviews)</span>
+                }
+                else
+                {
+                <span class="sf-detail-no-reviews">No reviews yet</span>
+                }
+            </div>
+
+            <div class="sf-detail-price">€@Model.Price.ToString("0.00")</div>
+
+            <p class="sf-detail-description">@Model.Description</p>
+
+            <form asp-controller="Cart" asp-action="Add" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="itemId" value="@Model.Id" />
+                <input type="hidden" name="quantity" value="1" />
+                <button type="submit" class="sf-detail-btn">Add to Cart</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="sf-detail-reviews">
+        <div class="sf-detail-reviews-header">
+            <h2 class="sf-detail-reviews-title">Reviews</h2>
+            @if (Model.ReviewCount > 0)
+            {
+            <span class="sf-detail-reviews-score">@Model.AverageScore ★</span>
+            <span class="sf-detail-reviews-count">@Model.ReviewCount total</span>
+            }
+        </div>
+
+        @if (Model.Reviews.Any())
+        {
+        <div class="sf-detail-reviews-grid">
+            @foreach (var review in Model.Reviews)
+            {
+            <div class="sf-review-card">
+                <div class="sf-review-top">
+                    <span class="sf-review-stars">
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                        <span style="color: @(i <= (int)review.Score ? " #fff" : "#333" )">★</span>
+                        }
+                    </span>
+                    <span class="sf-review-date">@review.CreatedAt.ToString("MMM dd, yyyy")</span>
+                </div>
+                @if (!string.IsNullOrWhiteSpace(review.Comment))
+                {
+                <p class="sf-review-text">@review.Comment</p>
+                }
+                <div class="sf-review-author">
+                    <div class="sf-review-avatar">
+                        @review.UserName.Substring(0, 1).ToUpper()
+                    </div>
+                    <span class="sf-review-name">@review.UserName</span>
+                </div>
+            </div>
+            }
+        </div>
+        }
+        else
+        {
+        <p class="sf-detail-no-reviews-text">Be the first to leave a review.</p>
+        }
+
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+        <div class="sf-detail-review-form">
+            <h3 class="sf-detail-review-form-title">Leave a Review</h3>
+            <form asp-controller="ItemDetail" asp-action="SubmitReview" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="ItemId" value="@Model.Id" />
+
+                <div class="sf-form-group">
+                    <label class="sf-form-label">Score</label>
+                    <div class="sf-star-picker" id="starPicker">
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                        <span class="sf-star" data-value="@i">★</span>
+                        }
+                    </div>
+                    <input type="hidden" name="Score" id="scoreInput" value="0" />
+                </div>
+
+                <div class="sf-form-group">
+                    <label class="sf-form-label">Comment <span class="sf-form-optional">(optional)</span></label>
+                    <textarea name="Comment" class="sf-form-textarea" rows="4"
+                              placeholder="Share your experience..."></textarea>
+                </div>
+
+                <button type="submit" class="sf-detail-btn">Submit Review</button>
+            </form>
+        </div>
+        }
+        else
+        {
+        <p class="sf-detail-login-prompt">
+            <a asp-area="Identity" asp-page="/Account/Login">Sign in</a> to leave a review.
+        </p>
+        }
+    </div>
+
+</div>
+
+@section Scripts {
+<script>
+    const stars = document.querySelectorAll('.sf-star');
+    const scoreInput = document.getElementById('scoreInput');
+
+    stars.forEach(star => {
+        star.addEventListener('click', () => {
+            const val = parseInt(star.dataset.value);
+            scoreInput.value = val;
+            stars.forEach((s, i) => {
+                s.classList.toggle('active', i < val);
+            });
+        });
+
+        star.addEventListener('mouseover', () => {
+            const val = parseInt(star.dataset.value);
+            stars.forEach((s, i) => {
+                s.style.color = i < val ? '#fff' : '#333';
+            });
+        });
+
+        star.addEventListener('mouseout', () => {
+            const val = parseInt(scoreInput.value);
+            stars.forEach((s, i) => {
+                s.style.color = i < val ? '#fff' : '#333';
+            });
+        });
+    });
+</script>
+}

@@ -1,0 +1,38 @@
+﻿@model WebshopShop.Models.Invoice
+@{
+Layout = "~/Views/Shared/_StorefrontLayout.cshtml";
+ViewData["Title"] = "Order Confirmed";
+}
+
+<div class="sf-page">
+    <div class="sf-confirmation">
+        <div class="sf-confirmation-icon">✓</div>
+        <h1 class="sf-confirmation-title">Order Confirmed</h1>
+        <p class="sf-confirmation-sub">Invoice #@Model.InvoiceNumber</p>
+        <p class="sf-confirmation-date">@Model.IssuedDate.ToString("MMM dd, yyyy")</p>
+
+        <div class="sf-confirmation-items">
+            @foreach (var ii in Model.ItemInvoices)
+            {
+            <div class="sf-checkout-item">
+                <span class="sf-checkout-item-title">@ii.Item?.Title</span>
+                <span class="sf-checkout-item-price">€@ii.Price.ToString("0.00")</span>
+            </div>
+            }
+        </div>
+
+        <div class="sf-checkout-total-row">
+            <span class="sf-cart-total-label">Total</span>
+            <span class="sf-checkout-total-price">€@Model.Total.ToString("0.00")</span>
+        </div>
+
+        <div class="sf-confirmation-actions">
+            <a asp-controller="Invoice" asp-action="DownloadPdf"
+               asp-route-invoiceId="@Model.Id"
+               class="sf-detail-btn">
+                Download PDF
+            </a>
+            <a href="/" class="sf-back-link">Back to Browse</a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,107 @@
+﻿@model WebshopShop.ViewModels.CheckoutViewModel
+@{
+Layout = "~/Views/Shared/_StorefrontLayout.cshtml";
+ViewData["Title"] = "Checkout";
+}
+
+<div class="sf-page">
+
+    <div class="sf-detail-back">
+        <a href="/Cart" class="sf-back-link">← Back to Cart</a>
+    </div>
+
+    <div class="sf-checkout-grid">
+
+        <!-- Address form -->
+        <div class="sf-checkout-form-wrap">
+            <h1 class="sf-cart-title">Checkout</h1>
+            <p class="sf-checkout-subtitle">Shipping & Billing Address</p>
+
+            <form asp-controller="Invoice" asp-action="Checkout" method="post">
+                @Html.AntiForgeryToken()
+
+                <div class="sf-form-row">
+                    <div class="sf-form-group">
+                        <label class="sf-form-label">First Name</label>
+                        <input type="text" name="FirstName" class="sf-form-input"
+                               value="@Model.FirstName" placeholder="John" />
+                        <span class="sf-form-error">@Html.ValidationMessage("FirstName")</span>
+                    </div>
+                    <div class="sf-form-group">
+                        <label class="sf-form-label">Last Name</label>
+                        <input type="text" name="LastName" class="sf-form-input"
+                               value="@Model.LastName" placeholder="Doe" />
+                        <span class="sf-form-error">@Html.ValidationMessage("LastName")</span>
+                    </div>
+                </div>
+
+                <div class="sf-form-group">
+                    <label class="sf-form-label">Address Line 1</label>
+                    <input type="text" name="AddressLine1" class="sf-form-input"
+                           value="@Model.AddressLine1" placeholder="123 Main St" />
+                    <span class="sf-form-error">@Html.ValidationMessage("AddressLine1")</span>
+                </div>
+
+                <div class="sf-form-group">
+                    <label class="sf-form-label">Address Line 2 <span class="sf-form-optional">(optional)</span></label>
+                    <input type="text" name="AddressLine2" class="sf-form-input"
+                           value="@Model.AddressLine2" placeholder="Apt 4B" />
+                </div>
+
+                <div class="sf-form-row">
+                    <div class="sf-form-group">
+                        <label class="sf-form-label">City</label>
+                        <input type="text" name="City" class="sf-form-input"
+                               value="@Model.City" placeholder="Vienna" />
+                        <span class="sf-form-error">@Html.ValidationMessage("City")</span>
+                    </div>
+                    <div class="sf-form-group">
+                        <label class="sf-form-label">ZIP Code</label>
+                        <input type="text" name="ZipCode" class="sf-form-input"
+                               value="@Model.ZipCode" placeholder="1010" />
+                        <span class="sf-form-error">@Html.ValidationMessage("ZipCode")</span>
+                    </div>
+                </div>
+
+                <div class="sf-form-row">
+                    <div class="sf-form-group">
+                        <label class="sf-form-label">Country</label>
+                        <input type="text" name="Country" class="sf-form-input"
+                               value="@Model.Country" placeholder="Austria" />
+                        <span class="sf-form-error">@Html.ValidationMessage("Country")</span>
+                    </div>
+                    <div class="sf-form-group">
+                        <label class="sf-form-label">State <span class="sf-form-optional">(optional)</span></label>
+                        <input type="text" name="State" class="sf-form-input"
+                               value="@Model.State" placeholder="Vienna" />
+                    </div>
+                </div>
+
+                <button type="submit" class="sf-detail-btn" style="width:100%; margin-top: 1rem;">
+                    Place Order
+                </button>
+            </form>
+        </div>
+
+        <!-- Order summary -->
+        <div class="sf-checkout-summary">
+            <h2 class="sf-checkout-summary-title">Order Summary</h2>
+
+            <div class="sf-checkout-items">
+                @foreach (var item in Model.Items)
+                {
+                <div class="sf-checkout-item">
+                    <span class="sf-checkout-item-title">@item.Title</span>
+                    <span class="sf-checkout-item-price">€@item.Price.ToString("0.00")</span>
+                </div>
+                }
+            </div>
+
+            <div class="sf-checkout-total-row">
+                <span class="sf-cart-total-label">Total</span>
+                <span class="sf-checkout-total-price">€@Model.Total.ToString("0.00")</span>
+            </div>
+        </div>
+
+    </div>
+</div>
