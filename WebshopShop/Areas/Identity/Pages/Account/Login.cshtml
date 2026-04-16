@@ -19,9 +19,9 @@ Layout = "/Views/Shared/_StorefrontLayout.cshtml";
             <div asp-validation-summary="ModelOnly" style="font-size:12px; color:#cc4444; margin-bottom:16px;"></div>
 
             <div class="sf-form-group">
-                <label asp-for="Input.Email" class="sf-form-label">Email</label>
-                <input asp-for="Input.Email" class="sf-form-input" autocomplete="username" placeholder="name@example.com" />
-                <span asp-validation-for="Input.Email" class="sf-form-error"></span>
+                <label asp-for="Input.EmailOrUsername" class="sf-form-label">Email or Username</label>
+                <input asp-for="Input.EmailOrUsername" class="sf-form-input" autocomplete="username" placeholder="name@example.com or john_doe" />
+                <span asp-validation-for="Input.EmailOrUsername" class="sf-form-error"></span>
             </div>
 
             <div class="sf-form-group">
@@ -31,7 +31,7 @@ Layout = "/Views/Shared/_StorefrontLayout.cshtml";
             </div>
 
             <div class="sf-form-group" style="display:flex; align-items:center; gap:8px;">
-                <input class="sf-form-checkbox" asp-for="Input.RememberMe" type="checkbox" style="width:14px; height:14px; accent-color:#fff; cursor:pointer;" />
+                <input asp-for="Input.RememberMe" type="checkbox" style="width:14px; height:14px; accent-color:#fff; cursor:pointer;" />
                 <label asp-for="Input.RememberMe" class="sf-form-label" style="margin:0;">Remember me</label>
             </div>
 
@@ -40,8 +40,8 @@ Layout = "/Views/Shared/_StorefrontLayout.cshtml";
             </button>
 
             <div style="margin-top: 1.5rem; display: flex; flex-direction: column; gap: 8px;">
-                <a id="forgot-password" asp-page="./ForgotPassword" style="font-size:13px; color:#444; text-decoration:none; transition: color 0.15s;">Forgot your password?</a>
-                <a id="resend-confirmation" asp-page="./ResendEmailConfirmation" style="font-size:13px; color:#444; text-decoration:none; transition: color 0.15s;">Resend email confirmation</a>
+                <a asp-page="./ForgotPassword" style="font-size:13px; color:#444; text-decoration:none;">Forgot your password?</a>
+                <a asp-page="./ResendEmailConfirmation" style="font-size:13px; color:#444; text-decoration:none;">Resend email confirmation</a>
             </div>
         </form>
 

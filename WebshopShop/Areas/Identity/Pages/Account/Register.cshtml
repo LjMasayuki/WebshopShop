@@ -19,8 +19,14 @@ Layout = "/Views/Shared/_StorefrontLayout.cshtml";
             <div asp-validation-summary="ModelOnly" style="font-size:12px; color:#cc4444; margin-bottom:16px;"></div>
 
             <div class="sf-form-group">
+                <label asp-for="Input.Username" class="sf-form-label">Username</label>
+                <input asp-for="Input.Username" class="sf-form-input" autocomplete="username" placeholder="e.g. john_doe" />
+                <span asp-validation-for="Input.Username" class="sf-form-error"></span>
+            </div>
+
+            <div class="sf-form-group">
                 <label asp-for="Input.Email" class="sf-form-label">Email</label>
-                <input asp-for="Input.Email" class="sf-form-input" autocomplete="username" placeholder="name@example.com" />
+                <input asp-for="Input.Email" class="sf-form-input" autocomplete="email" placeholder="name@example.com" />
                 <span asp-validation-for="Input.Email" class="sf-form-error"></span>
             </div>
 
