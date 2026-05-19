@@ -13,35 +13,42 @@
 
     <nav class="sf-nav">
         <a class="sf-nav-brand" asp-controller="Home" asp-action="Index">WebshopShop</a>
+
+        <input type="checkbox" id="sf-nav-toggle" class="sf-nav-toggle" />
+        <label for="sf-nav-toggle" class="sf-nav-burger" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </label>
+
         <ul class="sf-nav-links">
             <li><a asp-controller="Home" asp-action="Index">Browse</a></li>
             @if (User.IsInRole("Admin"))
             {
-            <li class="sf-nav-dropdown">
-                <a href="#">Admin ▾</a>
-                <ul class="sf-nav-dropdown-menu">
-                    <li><a asp-controller="Item" asp-action="Index">Webshops</a></li>
-                    <li><a asp-controller="Category" asp-action="Index">Categories</a></li>
-                    <li><a asp-controller="Manufacturer" asp-action="Index">Developers</a></li>
-                    <li><a asp-controller="Admin" asp-action="Orders">Orders</a></li>
-                    <li><a asp-controller="Admin" asp-action="Users">Users</a></li>
-                    <li><a asp-controller="Admin" asp-action="Statistics">Statistics</a></li>
-                </ul>
-            </li>
+                <li class="sf-nav-dropdown">
+                    <a href="#">Admin ▾</a>
+                    <ul class="sf-nav-dropdown-menu">
+                        <li><a asp-controller="Item" asp-action="Index">Webshops</a></li>
+                        <li><a asp-controller="Category" asp-action="Index">Categories</a></li>
+                        <li><a asp-controller="Manufacturer" asp-action="Index">Developers</a></li>
+                        <li><a asp-controller="Admin" asp-action="Orders">Orders</a></li>
+                        <li><a asp-controller="Admin" asp-action="Users">Users</a></li>
+                        <li><a asp-controller="Admin" asp-action="Statistics">Statistics</a></li>
+                    </ul>
+                </li>
             }
             @if (User.Identity!.IsAuthenticated)
             {
-            <li><a asp-area="Identity" asp-page="/Account/Manage/Index">Account</a></li>
-            <li>
-                <form asp-area="Identity" asp-page="/Account/Logout" method="post" style="display:inline">
-                    @Html.AntiForgeryToken()
-                    <button type="submit" style="background:none; border:none; padding:0; font-size:13px; color:#888; cursor:pointer; font-family:'DM Mono','Fira Mono',ui-monospace,monospace; transition:color 0.15s;">Sign out</button>
-                </form>
-            </li>
+                <li><a asp-controller="Invoice" asp-action="History">My Orders</a></li>
+                <li><a asp-area="Identity" asp-page="/Account/Manage/Index">Account</a></li>
+                <li>
+                    <form asp-area="Identity" asp-page="/Account/Logout" method="post" style="display:inline">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="sf-nav-signout">Sign out</button>
+                    </form>
+                </li>
             }
             else
             {
-            <li><a asp-area="Identity" asp-page="/Account/Login" class="sf-nav-cta">Sign in</a></li>
+                <li><a asp-area="Identity" asp-page="/Account/Login" class="sf-nav-cta">Sign in</a></li>
             }
             <li><a asp-controller="Cart" asp-action="Index" class="sf-nav-cart">Cart</a></li>
         </ul>

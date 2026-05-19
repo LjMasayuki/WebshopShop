@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebshopShop.Data;
+using WebshopShop.Documents;
 using WebshopShop.Models;
 using WebshopShop.ViewModels;
-using WebshopShop.Documents;
 
 namespace WebshopShop.Controllers
 {
@@ -19,6 +19,34 @@ namespace WebshopShop.Controllers
         {
             _context = context;
             _userManager = userManager;
+        }
+
+        public async Task<IActionResult> History()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return Unauthorized();
+
+            var invoices = await _context.Invoices
+                .Include(i => i.ItemInvoices)
+                    .ThenInclude(ii => ii.Item)
+                .Where(i => i.UserId == user.Id)
+                .OrderByDescending(i => i.IssuedDate)
+                .ToListAsync();
+
+            var vm = new OrderHistoryViewModel
+            {
+                Orders = invoices.Select(i => new OrderHistoryItemViewModel
+                {
+                    InvoiceId = i.Id,
+                    InvoiceNumber = i.InvoiceNumber,
+                    IssuedDate = i.IssuedDate,
+                    Total = i.Total,
+                    ItemCount = i.ItemInvoices.Count,
+                    ItemTitles = i.ItemInvoices.Select(ii => ii.Item.Title).ToList()
+                }).ToList()
+            };
+
+            return View(vm);
         }
 
         public async Task<IActionResult> Checkout()
@@ -79,13 +107,11 @@ namespace WebshopShop.Controllers
             if (!ModelState.IsValid)
             {
                 var errors = ModelState
-                    .Where(x => x.Value.Errors.Count > 0)
-                    .Select(x => new { x.Key, Errors = x.Value.Errors.Select(e => e.ErrorMessage) });
+                    .Where(x => x.Value!.Errors.Count > 0)
+                    .Select(x => new { x.Key, Errors = x.Value!.Errors.Select(e => e.ErrorMessage) });
 
                 foreach (var error in errors)
-                {
                     System.Diagnostics.Debug.WriteLine($"Field: {error.Key} — Errors: {string.Join(", ", error.Errors)}");
-                }
 
                 vm.Items = cartItems.Select(ci => new CartItemViewModel
                 {
@@ -98,7 +124,6 @@ namespace WebshopShop.Controllers
                 return View("Checkout", vm);
             }
 
-            // Create address
             var address = new Address
             {
                 FirstName = vm.FirstName,
@@ -114,7 +139,6 @@ namespace WebshopShop.Controllers
             _context.Addresses.Add(address);
             await _context.SaveChangesAsync();
 
-            // Create invoice
             var invoice = new Invoice
             {
                 UserId = user.Id,
@@ -128,7 +152,6 @@ namespace WebshopShop.Controllers
             _context.Invoices.Add(invoice);
             await _context.SaveChangesAsync();
 
-            // Create invoice items
             foreach (var ci in cartItems)
             {
                 _context.ItemInvoices.Add(new ItemInvoice
@@ -139,7 +162,6 @@ namespace WebshopShop.Controllers
                 });
             }
 
-            // Clear cart
             _context.CartItems.RemoveRange(cartItems);
             await _context.SaveChangesAsync();
 

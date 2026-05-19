@@ -24,6 +24,7 @@ namespace WebshopShop.Controllers
             var categories = await _db.Categories.ToListAsync();
             var reviews = await _db.Reviews
                 .Include(r => r.Item)
+                .Include(r => r.User)
                 .OrderByDescending(r => r.Id)
                 .Take(3)
                 .ToListAsync();
