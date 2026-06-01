@@ -2,47 +2,54 @@
 @model RegisterModel
 
 @{
-ViewData["Title"] = "Register";
-Layout = "/Views/Shared/_StorefrontLayout.cshtml";
+    ViewData["Title"] = "Register";
+    Layout = "/Views/Shared/_StorefrontLayout.cshtml";
 }
 
 <div class="sf-page">
-    <div style="max-width: 400px; margin: 4rem auto;">
+    <div class="sf-auth">
 
-        <div style="margin-bottom: 2rem;">
+        <div class="sf-auth-header">
             <p class="sf-hero-tag">Get started</p>
             <h1 class="sf-detail-title">Create account</h1>
-            <p class="sf-detail-description" style="margin-bottom: 0;">Already have an account? <a asp-page="./Login" style="color:#888; text-decoration:none;">Sign in here</a></p>
+            <p class="sf-detail-description">
+                Already have an account?
+                <a asp-page="./Login" class="sf-link">Sign in here</a>
+            </p>
         </div>
 
         <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <div asp-validation-summary="ModelOnly" style="font-size:12px; color:#cc4444; margin-bottom:16px;"></div>
+            <div asp-validation-summary="ModelOnly" class="sf-form-error"></div>
 
             <div class="sf-form-group">
                 <label asp-for="Input.Username" class="sf-form-label">Username</label>
-                <input asp-for="Input.Username" class="sf-form-input" autocomplete="username" placeholder="e.g. john_doe" />
+                <input asp-for="Input.Username" class="sf-form-input"
+                       autocomplete="username" placeholder="e.g. john_doe" />
                 <span asp-validation-for="Input.Username" class="sf-form-error"></span>
             </div>
 
             <div class="sf-form-group">
                 <label asp-for="Input.Email" class="sf-form-label">Email</label>
-                <input asp-for="Input.Email" class="sf-form-input" autocomplete="email" placeholder="name@example.com" />
+                <input asp-for="Input.Email" class="sf-form-input"
+                       autocomplete="email" placeholder="name@example.com" />
                 <span asp-validation-for="Input.Email" class="sf-form-error"></span>
             </div>
 
             <div class="sf-form-group">
                 <label asp-for="Input.Password" class="sf-form-label">Password</label>
-                <input asp-for="Input.Password" class="sf-form-input" autocomplete="new-password" placeholder="••••••••" />
+                <input asp-for="Input.Password" class="sf-form-input"
+                       autocomplete="new-password" placeholder="••••••••" />
                 <span asp-validation-for="Input.Password" class="sf-form-error"></span>
             </div>
 
             <div class="sf-form-group">
                 <label asp-for="Input.ConfirmPassword" class="sf-form-label">Confirm Password</label>
-                <input asp-for="Input.ConfirmPassword" class="sf-form-input" autocomplete="new-password" placeholder="••••••••" />
+                <input asp-for="Input.ConfirmPassword" class="sf-form-input"
+                       autocomplete="new-password" placeholder="••••••••" />
                 <span asp-validation-for="Input.ConfirmPassword" class="sf-form-error"></span>
             </div>
 
-            <button id="registerSubmit" type="submit" class="sf-detail-btn" style="width:100%; margin-top:8px;">
+            <button id="registerSubmit" type="submit" class="sf-detail-btn sf-detail-btn-block">
                 Create Account
             </button>
         </form>
@@ -51,5 +58,5 @@ Layout = "/Views/Shared/_StorefrontLayout.cshtml";
 </div>
 
 @section Scripts {
-<partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial" />
 }

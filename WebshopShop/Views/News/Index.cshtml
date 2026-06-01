@@ -1,0 +1,91 @@
+﻿@model WebshopShop.ViewModels.NewsListViewModel
+
+@{
+    ViewData["Title"] = "News";
+}
+
+<div class="adm-header">
+    <div class="adm-header-left">
+        <p class="adm-breadcrumb">Admin</p>
+        <h1 class="adm-title">News</h1>
+        <p class="adm-subtitle">Announcements and updates shown on the storefront</p>
+    </div>
+    <a asp-controller="News" asp-action="Create" class="adm-btn adm-btn-primary">+ Add News</a>
+</div>
+
+<div class="adm-table-wrap">
+
+    @* Desktop: table *@
+    <table class="adm-table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Created</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Items.Any())
+            {
+                <tr><td colspan="3" class="adm-table-empty">No news posts yet.</td></tr>
+            }
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>
+                        <strong>@item.Title</strong>
+                        <small>@(item.Body.Length > 80 ? item.Body.Substring(0, 80) + "…" : item.Body)</small>
+                    </td>
+                    <td>@item.Created.ToString("MMM dd, yyyy")</td>
+                    <td>
+                        <div class="adm-table-actions">
+                            <a asp-controller="News" asp-action="Edit" asp-route-id="@item.Id"
+                               class="adm-btn adm-btn-ghost adm-btn-sm">Edit</a>
+                            <form asp-controller="News" asp-action="Delete" asp-route-id="@item.Id"
+                                  method="post" style="display:inline"
+                                  onsubmit="return confirm('Delete this news post?')">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="adm-btn adm-btn-danger adm-btn-sm">Delete</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @* Mobile: cards *@
+    <div class="adm-cards">
+        @if (!Model.Items.Any())
+        {
+            <div class="adm-card-empty">No news posts yet.</div>
+        }
+        @foreach (var item in Model.Items)
+        {
+            <div class="adm-card">
+                <div class="adm-card-row">
+                    <span class="adm-card-label">Title</span>
+                    <span class="adm-card-value">
+                        <strong>@item.Title</strong>
+                        <small>@(item.Body.Length > 80 ? item.Body.Substring(0, 80) + "…" : item.Body)</small>
+                    </span>
+                </div>
+                <div class="adm-card-row">
+                    <span class="adm-card-label">Created</span>
+                    <span class="adm-card-value">@item.Created.ToString("MMM dd, yyyy")</span>
+                </div>
+                <div class="adm-card-actions">
+                    <a asp-controller="News" asp-action="Edit" asp-route-id="@item.Id"
+                       class="adm-btn adm-btn-ghost adm-btn-sm">Edit</a>
+                    <form asp-controller="News" asp-action="Delete" asp-route-id="@item.Id"
+                          method="post" style="display:inline"
+                          onsubmit="return confirm('Delete this news post?')">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="adm-btn adm-btn-danger adm-btn-sm">Delete</button>
+                    </form>
+                </div>
+            </div>
+        }
+    </div>
+
+</div>

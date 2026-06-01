@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebshopShop.Data;
 using WebshopShop.ViewModels;
@@ -31,11 +31,17 @@ namespace WebshopShop.Controllers
 
             var allReviews = await _db.Reviews.ToListAsync();
 
+            var latestNews = await _db.News
+                .OrderByDescending(n => n.Created)
+                .Take(4)
+                .ToListAsync();
+
             var vm = new HomeIndexViewModel
             {
                 Items = items,
                 Categories = categories,
                 Reviews = reviews,
+                LatestNews = latestNews,
                 AverageScore = allReviews.Count > 0 ? Math.Round(allReviews.Average(r => (double)r.Score), 1) : 0,
                 ReviewCount = allReviews.Count,
                 ActiveCategoryId = categoryId

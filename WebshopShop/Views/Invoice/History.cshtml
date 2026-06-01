@@ -1,8 +1,8 @@
 ﻿@model WebshopShop.ViewModels.OrderHistoryViewModel
 
 @{
-ViewData["Title"] = "My Orders";
-Layout = "_StorefrontLayout";
+    ViewData["Title"] = "My Orders";
+    Layout = "_StorefrontLayout";
 }
 
 <div class="sf-page">
@@ -14,36 +14,39 @@ Layout = "_StorefrontLayout";
 
     @if (!Model.Orders.Any())
     {
-    <div class="sf-empty">You haven't placed any orders yet. <a asp-controller="Home" asp-action="Index" class="sf-link">Start browsing.</a></div>
+        <div class="sf-empty">
+            You haven't placed any orders yet.
+            <a asp-controller="Home" asp-action="Index" class="sf-link">Start browsing.</a>
+        </div>
     }
     else
     {
-    <div class="sf-order-list">
-        @foreach (var order in Model.Orders)
-        {
-        <div class="sf-order-card">
-            <div class="sf-order-card-header">
-                <span class="sf-order-number">@order.InvoiceNumber</span>
-                <span class="sf-order-date">@order.IssuedDate.ToString("MMM dd, yyyy")</span>
-            </div>
-            <div class="sf-order-card-body">
-                <p class="sf-order-items">
-                    @string.Join(", ", order.ItemTitles)
-                </p>
-                <div class="sf-order-card-footer">
-                    <span class="sf-order-total">€@order.Total.ToString("0.00")</span>
-                    <div class="sf-order-actions">
-                        <a class="sf-btn sf-btn-ghost"
-                           asp-controller="Invoice"
-                           asp-action="DownloadPdf"
-                           asp-route-invoiceId="@order.InvoiceId">
-                            Download PDF
-                        </a>
+        <div class="sf-order-list">
+            @foreach (var order in Model.Orders)
+            {
+                <div class="sf-order-card">
+                    <div class="sf-order-card-header">
+                        <span class="sf-order-number">@order.InvoiceNumber</span>
+                        <span class="sf-order-date">@order.IssuedDate.ToString("MMM dd, yyyy")</span>
+                    </div>
+                    <div class="sf-order-card-body">
+                        <p class="sf-order-items">
+                            @string.Join(", ", order.ItemTitles)
+                        </p>
+                        <div class="sf-order-card-footer">
+                            <span class="sf-order-total">€@order.Total.ToString("0.00")</span>
+                            <div class="sf-order-actions">
+                                <a class="sf-btn sf-btn-ghost"
+                                   asp-controller="Invoice"
+                                   asp-action="DownloadPdf"
+                                   asp-route-invoiceId="@order.InvoiceId">
+                                    Download PDF
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            }
         </div>
-        }
-    </div>
     }
 </div>

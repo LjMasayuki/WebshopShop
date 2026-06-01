@@ -1,0 +1,35 @@
+﻿@model WebshopShop.ViewModels.NewsFormViewModel
+
+@{
+    ViewData["Title"] = "Add News";
+}
+
+<div class="adm-header">
+    <div class="adm-header-left">
+        <p class="adm-breadcrumb"><a asp-controller="News" asp-action="Index">News</a> / New</p>
+        <h1 class="adm-title">Add News Post</h1>
+        <p class="adm-subtitle">Publish an announcement to the storefront.</p>
+    </div>
+</div>
+
+<form asp-controller="News" asp-action="Create" method="post" class="adm-form">
+    @Html.AntiForgeryToken()
+
+    <div class="adm-form-group">
+        <label asp-for="Title" class="adm-form-label">Title</label>
+        <input asp-for="Title" class="adm-form-input" placeholder="e.g. New webshops added this week" />
+        <span asp-validation-for="Title" class="adm-form-error"></span>
+    </div>
+
+    <div class="adm-form-group">
+        <label asp-for="Body" class="adm-form-label">Body</label>
+        <textarea asp-for="Body" class="adm-form-textarea" rows="6"
+                  placeholder="Write the news content here..."></textarea>
+        <span asp-validation-for="Body" class="adm-form-error"></span>
+    </div>
+
+    <div class="adm-form-actions">
+        <button type="submit" class="adm-btn adm-btn-primary">Publish</button>
+        <a asp-controller="News" asp-action="Index" class="adm-btn adm-btn-ghost">Cancel</a>
+    </div>
+</form>

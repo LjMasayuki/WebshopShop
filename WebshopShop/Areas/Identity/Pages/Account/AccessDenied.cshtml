@@ -1,10 +1,18 @@
 ﻿@page
 @model AccessDeniedModel
 @{
-    ViewData["Title"] = "Access denied";
+    ViewData["Title"] = "Access Denied";
+    Layout = "/Views/Shared/_StorefrontLayout.cshtml";
 }
 
-<header>
-    <h1 class="text-danger">@ViewData["Title"]</h1>
-    <p class="text-danger">You do not have access to this resource.</p>
-</header>
+<div class="sf-page">
+    <div class="sf-error">
+        <p class="sf-error-code">403</p>
+        <h1 class="sf-error-title">Access Denied</h1>
+        <p class="sf-error-sub">
+            You don't have permission to access this resource.
+            If you think this is a mistake, contact an administrator.
+        </p>
+        <a href="/" class="sf-detail-btn">Back to Browse</a>
+    </div>
+</div>

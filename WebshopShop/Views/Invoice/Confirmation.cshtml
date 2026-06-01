@@ -1,7 +1,7 @@
 ﻿@model WebshopShop.Models.Invoice
 @{
-Layout = "~/Views/Shared/_StorefrontLayout.cshtml";
-ViewData["Title"] = "Order Confirmed";
+    Layout = "~/Views/Shared/_StorefrontLayout.cshtml";
+    ViewData["Title"] = "Order Confirmed";
 }
 
 <div class="sf-page">
@@ -14,10 +14,10 @@ ViewData["Title"] = "Order Confirmed";
         <div class="sf-confirmation-items">
             @foreach (var ii in Model.ItemInvoices)
             {
-            <div class="sf-checkout-item">
-                <span class="sf-checkout-item-title">@ii.Item?.Title</span>
-                <span class="sf-checkout-item-price">€@ii.Price.ToString("0.00")</span>
-            </div>
+                <div class="sf-checkout-item">
+                    <span class="sf-checkout-item-title">@ii.Item?.Title</span>
+                    <span class="sf-checkout-item-price">€@ii.Price.ToString("0.00")</span>
+                </div>
             }
         </div>
 

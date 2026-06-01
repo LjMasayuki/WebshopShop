@@ -9,7 +9,7 @@
     <div class="sf-hero">
         <p class="sf-hero-tag">Ready-made webshops</p>
         <h1 class="sf-hero-title">
-            Buy a webshop.<br>
+            Buy a webshop.<br />
             <span class="sf-hero-title-muted">Skip the build.</span>
         </h1>
         <p class="sf-hero-sub">Professional webshops built by top developers — ready to launch.</p>
@@ -96,6 +96,27 @@
     }
 </div>
 
+@if (Model.LatestNews.Any())
+{
+    <div class="sf-page">
+        <section class="sf-news">
+            <div class="sf-news-header">
+                <h2 class="sf-news-title">Latest News</h2>
+            </div>
+            <div class="sf-news-list">
+                @foreach (var news in Model.LatestNews)
+                {
+                    <article class="sf-news-item">
+                        <h3 class="sf-news-item-title">@news.Title</h3>
+                        <p class="sf-news-item-date">@news.Created.ToString("MMM dd, yyyy")</p>
+                        <p class="sf-news-item-body">@news.Body</p>
+                    </article>
+                }
+            </div>
+        </section>
+    </div>
+}
+
 @if (Model.ReviewCount > 0)
 {
     <div class="sf-page">
@@ -138,7 +159,7 @@
                             <div class="sf-review-avatar">@initials</div>
                             <div>
                                 <p class="sf-review-name">@displayName</p>
-                                <a href="/ItemDetail/Index/@review.Item?.Id" class="sf-review-product" style="text-decoration:none; color:inherit;">@review.Item?.Title</a>
+                                <a href="/ItemDetail/Index/@review.Item?.Id" class="sf-review-product">@review.Item?.Title</a>
                             </div>
                         </div>
                     </div>

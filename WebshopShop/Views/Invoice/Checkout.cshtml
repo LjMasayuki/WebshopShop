@@ -1,7 +1,7 @@
 ﻿@model WebshopShop.ViewModels.CheckoutViewModel
 @{
-Layout = "~/Views/Shared/_StorefrontLayout.cshtml";
-ViewData["Title"] = "Checkout";
+    Layout = "~/Views/Shared/_StorefrontLayout.cshtml";
+    ViewData["Title"] = "Checkout";
 }
 
 <div class="sf-page">
@@ -15,7 +15,7 @@ ViewData["Title"] = "Checkout";
         <!-- Address form -->
         <div class="sf-checkout-form-wrap">
             <h1 class="sf-cart-title">Checkout</h1>
-            <p class="sf-checkout-subtitle">Shipping & Billing Address</p>
+            <p class="sf-checkout-subtitle">Shipping &amp; Billing Address</p>
 
             <form asp-controller="Invoice" asp-action="Checkout" method="post">
                 @Html.AntiForgeryToken()
@@ -77,7 +77,7 @@ ViewData["Title"] = "Checkout";
                     </div>
                 </div>
 
-                <button type="submit" class="sf-detail-btn" style="width:100%; margin-top: 1rem;">
+                <button type="submit" class="sf-detail-btn sf-detail-btn-block" style="margin-top: 1rem;">
                     Place Order
                 </button>
             </form>
@@ -90,10 +90,10 @@ ViewData["Title"] = "Checkout";
             <div class="sf-checkout-items">
                 @foreach (var item in Model.Items)
                 {
-                <div class="sf-checkout-item">
-                    <span class="sf-checkout-item-title">@item.Title</span>
-                    <span class="sf-checkout-item-price">€@item.Price.ToString("0.00")</span>
-                </div>
+                    <div class="sf-checkout-item">
+                        <span class="sf-checkout-item-title">@item.Title</span>
+                        <span class="sf-checkout-item-price">€@item.Price.ToString("0.00")</span>
+                    </div>
                 }
             </div>
 

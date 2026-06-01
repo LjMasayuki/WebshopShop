@@ -7,6 +7,7 @@ namespace WebshopShop.ViewModels
         public IEnumerable<Item> Items { get; set; } = [];
         public IEnumerable<Review> Reviews { get; set; } = [];
         public IEnumerable<Category> Categories { get; set; } = [];
+        public IEnumerable<News> LatestNews { get; set; } = [];
         public double AverageScore { get; set; }
         public int ReviewCount { get; set; }
         public int? ActiveCategoryId { get; set; }

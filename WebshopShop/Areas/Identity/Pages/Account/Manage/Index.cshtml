@@ -1,15 +1,15 @@
 ﻿@page
 @model IndexModel
 @{
-ViewData["Title"] = "Profile";
-ViewData["ActivePage"] = ManageNavPages.Index;
-Layout = "/Views/Shared/_StorefrontLayout.cshtml";
+    ViewData["Title"] = "Profile";
+    ViewData["ActivePage"] = ManageNavPages.Index;
+    Layout = "/Views/Shared/_StorefrontLayout.cshtml";
 }
 
 <div class="sf-page">
-    <div style="max-width: 400px; margin: 4rem auto;">
+    <div class="sf-auth">
 
-        <div style="margin-bottom: 2rem;">
+        <div class="sf-auth-header">
             <p class="sf-hero-tag">Account</p>
             <h1 class="sf-detail-title">Profile</h1>
         </div>
@@ -17,21 +17,21 @@ Layout = "/Views/Shared/_StorefrontLayout.cshtml";
         <partial name="_StatusMessage" for="StatusMessage" />
 
         <form id="profile-form" method="post">
-            <div asp-validation-summary="ModelOnly" style="font-size:12px; color:#cc4444; margin-bottom:16px;"></div>
+            <div asp-validation-summary="ModelOnly" class="sf-form-error"></div>
 
             <div class="sf-form-group">
                 <label asp-for="Username" class="sf-form-label">Username</label>
-                <input asp-for="Username" class="sf-form-input" disabled
-                       style="opacity:0.4; cursor:not-allowed;" />
+                <input asp-for="Username" class="sf-form-input sf-form-input-disabled" disabled />
             </div>
 
             <div class="sf-form-group">
                 <label asp-for="Input.PhoneNumber" class="sf-form-label">Phone Number</label>
-                <input asp-for="Input.PhoneNumber" class="sf-form-input" placeholder="e.g. +43 123 456 789" />
+                <input asp-for="Input.PhoneNumber" class="sf-form-input"
+                       placeholder="e.g. +43 123 456 789" />
                 <span asp-validation-for="Input.PhoneNumber" class="sf-form-error"></span>
             </div>
 
-            <button id="update-profile-button" type="submit" class="sf-detail-btn" style="width:100%; margin-top:8px;">
+            <button id="update-profile-button" type="submit" class="sf-detail-btn sf-detail-btn-block">
                 Save
             </button>
         </form>
@@ -40,5 +40,5 @@ Layout = "/Views/Shared/_StorefrontLayout.cshtml";
 </div>
 
 @section Scripts {
-<partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial" />
 }

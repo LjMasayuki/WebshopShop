@@ -1,7 +1,7 @@
 ﻿@model List<WebshopShop.ViewModels.Admin.OrderListViewModel>
 
 @{
-ViewData["Title"] = "Orders";
+    ViewData["Title"] = "Orders";
 }
 
 <div class="adm-header">
@@ -13,6 +13,7 @@ ViewData["Title"] = "Orders";
 </div>
 
 <div class="adm-table-wrap">
+
     <table class="adm-table">
         <thead>
             <tr>
@@ -27,27 +28,67 @@ ViewData["Title"] = "Orders";
         <tbody>
             @if (!Model.Any())
             {
-            <tr><td colspan="6" class="adm-table-empty">No orders yet.</td></tr>
+                <tr><td colspan="6" class="adm-table-empty">No orders yet.</td></tr>
             }
             @foreach (var order in Model)
             {
-            <tr>
-                <td><strong>@order.InvoiceNumber</strong></td>
-                <td>
-                    <strong>@order.UserName</strong>
-                    <small>@order.Email</small>
-                </td>
-                <td><span class="adm-count">@order.ItemCount</span></td>
-                <td>€@order.Total.ToString("0.00")</td>
-                <td>@order.IssuedDate.ToString("MMM dd, yyyy")</td>
-                <td>
-                    <div class="adm-table-actions">
-                        <a asp-controller="Admin" asp-action="OrderDetail" asp-route-id="@order.Id"
-                           class="adm-btn adm-btn-ghost adm-btn-sm">View</a>
-                    </div>
-                </td>
-            </tr>
+                <tr>
+                    <td><strong>@order.InvoiceNumber</strong></td>
+                    <td>
+                        <strong>@order.UserName</strong>
+                        <small>@order.Email</small>
+                    </td>
+                    <td><span class="adm-count">@order.ItemCount</span></td>
+                    <td>€@order.Total.ToString("0.00")</td>
+                    <td>@order.IssuedDate.ToString("MMM dd, yyyy")</td>
+                    <td>
+                        <div class="adm-table-actions">
+                            <a asp-controller="Admin" asp-action="OrderDetail" asp-route-id="@order.Id"
+                               class="adm-btn adm-btn-ghost adm-btn-sm">View</a>
+                        </div>
+                    </td>
+                </tr>
             }
         </tbody>
     </table>
+
+    <div class="adm-cards">
+        @if (!Model.Any())
+        {
+            <div class="adm-card-empty">No orders yet.</div>
+        }
+        @foreach (var order in Model)
+        {
+            <div class="adm-card">
+                <div class="adm-card-row">
+                    <span class="adm-card-label">Invoice</span>
+                    <span class="adm-card-value"><strong>@order.InvoiceNumber</strong></span>
+                </div>
+                <div class="adm-card-row">
+                    <span class="adm-card-label">Customer</span>
+                    <span class="adm-card-value">
+                        <strong>@order.UserName</strong>
+                        <small>@order.Email</small>
+                    </span>
+                </div>
+                <div class="adm-card-row">
+                    <span class="adm-card-label">Items</span>
+                    <span class="adm-card-value"><span class="adm-count">@order.ItemCount</span></span>
+                </div>
+                <div class="adm-card-row">
+                    <span class="adm-card-label">Total</span>
+                    <span class="adm-card-value">€@order.Total.ToString("0.00")</span>
+                </div>
+                <div class="adm-card-row">
+                    <span class="adm-card-label">Date</span>
+                    <span class="adm-card-value">@order.IssuedDate.ToString("MMM dd, yyyy")</span>
+                </div>
+                <div class="adm-card-actions">
+                    <a asp-controller="Admin" asp-action="OrderDetail" asp-route-id="@order.Id"
+                       class="adm-btn adm-btn-ghost adm-btn-sm">View</a>
+                </div>
+            </div>
+        }
+    </div>
+
 </div>

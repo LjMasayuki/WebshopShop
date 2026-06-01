@@ -1,7 +1,7 @@
 ﻿@model WebshopShop.ViewModels.Admin.EditUserRolesViewModel
 
 @{
-ViewData["Title"] = "Edit Roles";
+    ViewData["Title"] = "Edit Roles";
 }
 
 <div class="adm-header">
@@ -19,14 +19,14 @@ ViewData["Title"] = "Edit Roles";
     <input type="hidden" name="Email" value="@Model.Email" />
 
     @for (int i = 0; i < Model.Roles.Count; i++)
-                        {
-    <div class="adm-form-group" style="display:flex; align-items:center; gap:10px;">
-        <input type="hidden" name="Roles[@i].RoleName" value="@Model.Roles[i].RoleName" />
-        <input type="checkbox" name="Roles[@i].IsAssigned" value="true"
-               @(Model.Roles[i].IsAssigned ? "checked" : "" )
-               style="width:14px; height:14px; accent-color:#fff; cursor:pointer;" />
-        <label class="adm-form-label" style="margin:0;">@Model.Roles[i].RoleName</label>
-    </div>
+    {
+        <div class="adm-form-checkbox-row">
+            <input type="hidden" name="Roles[@i].RoleName" value="@Model.Roles[i].RoleName" />
+            <input type="checkbox" name="Roles[@i].IsAssigned" value="true"
+                   id="role-@i"
+                   @(Model.Roles[i].IsAssigned ? "checked" : "") />
+            <label class="adm-form-label" for="role-@i">@Model.Roles[i].RoleName</label>
+        </div>
     }
 
     <div class="adm-form-actions">
